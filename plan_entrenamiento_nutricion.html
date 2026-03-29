@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Plan Entrenamiento + Nutrición</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0C14;--card:#141420;--card2:#1A1A2A;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#E2E2F0;--muted:#8888A8;--faint:#55556A;
+  --cyan:#2DE2D5;--purple:#9B8FFF;--amber:#FFB020;
+  --green:#00D68F;--red:#FF4757;--blue:#4DA6FF;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{background:var(--bg);}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;line-height:1.6;
+  padding:24px 16px env(safe-area-inset-bottom);
+  max-width:680px;margin:0 auto;
+}
+/* ── TYPOGRAPHY ── */
+.headline{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.1;color:#fff;}
+.headline em{font-style:normal;color:var(--cyan);}
+.subhead{font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* ── HEADER ── */
+.header{margin-bottom:24px;}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px;}
+.profile-pill{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;text-align:right;flex-shrink:0;}
+.plbl{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;}
+.pval{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-top:2px;}
+.psub{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* ── METRICS ── */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.metric .ml{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.metric .mv{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1;}
+.metric .mu{font-size:10px;color:var(--muted);margin-top:2px;}
+.metric.wide{grid-column:1/-1;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px;position:sticky;top:0;background:var(--bg);padding-top:8px;z-index:10;}
+.tab-btn{background:none;border:1px solid transparent;border-bottom:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);padding:10px 20px;border-radius:8px 8px 0 0;letter-spacing:.03em;transition:all .15s;position:relative;top:1px;-webkit-appearance:none;}
+.tab-btn.active{color:#fff;background:var(--card);border-color:var(--border);border-bottom-color:var(--card);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── SECTION LABEL ── */
+.slbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.slbl::before{content:'';width:3px;height:11px;background:var(--cyan);border-radius:2px;flex-shrink:0;}
+
+/* ── WEEK GRID ── */
+.week-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px 8px;}
+.week-grid{display:grid;grid-template-columns:repeat(7,minmax(88px,1fr));gap:6px;min-width:640px;margin-bottom:10px;}
+.dc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 6px;text-align:center;}
+.dc.hard{border-color:rgba(255,176,32,.5);background:rgba(255,176,32,.06);}
+.dc.z2{border-color:rgba(45,226,213,.5);background:rgba(45,226,213,.06);}
+.dc.run{border-color:rgba(155,143,255,.5);background:rgba(155,143,255,.06);}
+.dc.long{border-color:rgba(0,214,143,.5);background:rgba(0,214,143,.06);}
+.dc.opt{opacity:.6;border-color:rgba(45,226,213,.3);background:rgba(45,226,213,.04);}
+.dn{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.di{font-size:20px;margin-bottom:6px;display:block;}
+.dt{font-size:10px;font-weight:600;color:var(--muted);line-height:1.3;}
+.dc.hard .dt{color:var(--amber);}.dc.z2 .dt{color:var(--cyan);}.dc.run .dt{color:var(--purple);}.dc.long .dt{color:var(--green);}.dc.opt .dt{color:var(--cyan);}
+.dd{font-size:9px;color:var(--faint);margin-top:3px;line-height:1.3;}
+.scroll-hint{font-size:10px;color:var(--faint);text-align:center;margin-bottom:14px;}
+
+/* ── POLAR BAR ── */
+.polar-bar{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:32px;}
+.pb-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.pb-track{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.pb-low{background:var(--cyan);opacity:.7;width:80%;}.pb-high{background:var(--amber);width:20%;}
+.pb-legend{display:flex;flex-direction:column;gap:4px;font-size:11px;}
+
+/* ── ZONES ── */
+.zone-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.zone-row{display:grid;grid-template-columns:70px 90px 1fr;gap:8px;align-items:center;background:var(--card);border-radius:8px;padding:10px 12px;}
+.zpill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;}
+.z1p{background:rgba(85,85,106,.35);color:#9999BB;}.z2p{background:rgba(45,226,213,.15);color:var(--cyan);}
+.z3p{background:rgba(77,166,255,.15);color:var(--blue);}.z4p{background:rgba(255,176,32,.15);color:var(--amber);}
+.z5p{background:rgba(255,71,87,.15);color:var(--red);}
+.zppm{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
+.zinfo{font-size:11px;color:var(--muted);line-height:1.4;}
+
+/* ── SESSION BLOCKS ── */
+.sblocks{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+.sblk{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.sblk.main{border-color:rgba(255,176,32,.4);background:rgba(255,176,32,.05);}
+.sblk-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;}
+.sblk.main .sblk-lbl{color:var(--amber);}
+.sblk-dur{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:5px;}
+.sblk-txt{font-size:12px;color:var(--muted);line-height:1.5;}
+.ibar{display:flex;gap:3px;align-items:flex-end;height:32px;margin:10px 0;}
+.ib-on{background:var(--amber);border-radius:3px 3px 0 0;flex:1;height:100%;}
+.ib-off{background:rgba(45,226,213,.3);border-radius:3px 3px 0 0;flex:1;height:42%;}
+.notebox{background:var(--card2);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;}
+
+/* ── CHO ── */
+.cho-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px 8px;}
+.cho-row{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:6px;min-width:580px;margin-bottom:10px;}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center;}
+.cday{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px;}
+.ctype{font-size:9px;color:var(--faint);margin-bottom:8px;}
+.cbarwrap{height:48px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px;}
+.cbar{width:28px;border-radius:4px 4px 0 0;}
+.lv1{background:rgba(85,85,106,.5);}.lv2{background:rgba(45,226,213,.45);}.lv3{background:rgba(255,176,32,.65);}.lv4{background:var(--green);}
+.cval{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}.cunit{font-size:9px;color:var(--muted);}
+
+/* ── DAILY CARDS ── */
+.dcard{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.dcard.crit{border-color:rgba(255,71,87,.45);}
+.dcard-h{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.dcard.crit .dcard-h{border-bottom-color:rgba(255,71,87,.2);}
+.dday{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.dbadge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:600;}
+.db-r{background:rgba(85,85,106,.3);color:#9999BB;}.db-h{background:rgba(255,176,32,.15);color:var(--amber);}
+.db-z{background:rgba(45,226,213,.15);color:var(--cyan);}.db-n{background:rgba(155,143,255,.15);color:var(--purple);}
+.dcard-b{padding:12px 14px;}
+.mi{margin-bottom:10px;}.mi:last-child{margin-bottom:0;}
+.mn{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:3px;}
+.mc{font-size:12px;color:var(--muted);line-height:1.5;}
+.ma{font-size:11px;color:var(--cyan);margin-top:2px;line-height:1.4;}
+.mw{font-size:11px;color:var(--amber);margin-top:2px;line-height:1.4;}
+.mr2{font-size:11px;color:var(--red);margin-top:2px;line-height:1.4;}
+.dcard-f{padding:9px 14px 4px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.plbl{font-size:10px;color:var(--muted);white-space:nowrap;}
+.ptrk{flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden;}
+.pfill{height:100%;border-radius:2px;}
+.ppct{font-size:11px;font-weight:600;white-space:nowrap;}
+.cholbl{font-size:10px;color:var(--faint);padding:4px 14px 10px;}
+.alert-r{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.3);border-radius:6px;padding:8px 10px;font-size:11px;color:#FF8090;line-height:1.5;margin:8px 0;}
+
+/* ── SATURDAY ── */
+.sat-section{margin-bottom:32px;}
+.sat-block{background:var(--card);border:1px solid rgba(0,214,143,.25);border-radius:10px;padding:14px 16px;margin-bottom:8px;}
+.st{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+.si{margin-bottom:8px;}.si:last-child{margin-bottom:0;}
+.si-lbl{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;}
+.si-val{font-size:12px;color:var(--text);line-height:1.5;}
+.si-note{font-size:11px;color:var(--green);margin-top:2px;}
+
+/* ── WHEY ── */
+.whey-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px 8px;}
+.wgrid{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:6px;min-width:680px;margin-bottom:32px;}
+.wcard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 10px;}
+.wday{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.wdose{background:rgba(45,226,213,.08);border-radius:6px;padding:7px 9px;margin-bottom:5px;}
+.wdose:last-child{margin-bottom:0;}
+.wtime{font-size:9px;color:var(--cyan);font-weight:600;margin-bottom:2px;}
+.wdesc{font-size:10px;color:var(--muted);line-height:1.4;}
+
+/* ── FOOTER ── */
+.ftrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:24px;border-top:1px solid var(--border);margin-bottom:20px;}
+.ft{text-align:center;background:var(--card);border-radius:10px;padding:14px 8px;}
+.ft-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1;}
+.ft-val span{font-size:12px;color:var(--muted);}
+.ft-lbl{font-size:10px;color:var(--muted);margin-top:4px;}
+.note-footer{font-size:10px;color:var(--faint);text-align:center;padding-top:16px;border-top:1px solid var(--border);line-height:1.6;}
+
+/* ── DESKTOP OVERRIDE ── */
+@media(min-width:700px){
+  body{padding:40px 40px 60px;max-width:980px;}
+  .headline{font-size:46px;}
+  .header-row{margin-bottom:26px;}
+  .metrics{grid-template-columns:repeat(5,1fr);}
+  .metric.wide{grid-column:auto;}
+  .week-scroll{overflow-x:visible;margin:0;padding:0;}
+  .week-grid{min-width:unset;grid-template-columns:repeat(7,1fr);}
+  .cho-scroll{overflow-x:visible;margin:0;padding:0;}
+  .cho-row{min-width:unset;grid-template-columns:repeat(5,1fr);}
+  .whey-scroll{overflow-x:visible;margin:0;padding:0;}
+  .wgrid{min-width:unset;grid-template-columns:repeat(5,1fr);}
+  .sblocks{flex-direction:row;}
+  .sblk.main{flex:2;}
+  .zone-list{gap:5px;}
+  .zone-row{grid-template-columns:80px 100px 1fr;}
+  .sat-section{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:40px;}
+  .sat-block{margin-bottom:0;}
+  .ftrow{grid-template-columns:repeat(4,1fr);}
+  .dcard{margin-bottom:0;}
+  .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:40px;}
+  .dcard.full{grid-column:1/-1;}
+  .fri-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .scroll-hint{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-row">
+    <div>
+      <div class="headline">Plan de<br><em>entrenamiento</em><br>+ nutrición</div>
+      <div class="subhead">Pérdida de grasa · Rendimiento ciclista · 12–16 semanas</div>
+    </div>
+    <div class="profile-pill">
+      <div class="plbl">Perfil</div>
+      <div class="pval">27a · 89kg · 176cm</div>
+      <div class="psub">Cinta pecho + Garmin</div>
+    </div>
+  </div>
+  <div class="metrics">
+    <div class="metric"><div class="ml">TDEE</div><div class="mv">2.950</div><div class="mu">kcal / día</div></div>
+    <div class="metric"><div class="ml">Objetivo</div><div class="mv">2.450</div><div class="mu">kcal / día media</div></div>
+    <div class="metric"><div class="ml">Déficit</div><div class="mv" style="color:var(--cyan)">~475</div><div class="mu">kcal · ~0,5 kg/sem.</div></div>
+    <div class="metric"><div class="ml">Proteína</div><div class="mv" style="color:var(--green)">~151</div><div class="mu">g/día · 1,70 g/kg</div></div>
+    <div class="metric wide"><div class="ml">Pérdida esperada</div><div class="mv" style="color:var(--amber)">6–8 <span style="font-size:14px;color:var(--muted)">kg en 12–16 semanas</span></div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('train',this)">Entrenamiento</button>
+  <button class="tab-btn" onclick="switchTab('menu',this)">Menú semanal</button>
+</div>
+
+<!-- ═══ TAB ENTRENAMIENTO ═══ -->
+<div id="tab-train" class="tab-panel active">
+
+  <div class="slbl">Semana tipo</div>
+  <div class="week-scroll">
+    <div class="week-grid">
+      <div class="dc"><div class="dn">Lun</div><span class="di">—</span><div class="dt">Descanso</div><div class="dd">Solo paseos</div></div>
+      <div class="dc"><div class="dn">Mar</div><span class="di">—</span><div class="dt">Descanso</div><div class="dd">Solo paseos</div></div>
+      <div class="dc hard"><div class="dn">Mié</div><span class="di">⚡</span><div class="dt">Bici Z5</div><div class="dd">4×4 min · tarde</div></div>
+      <div class="dc z2"><div class="dn">Jue</div><span class="di">🚴</span><div class="dt">Bici Z2</div><div class="dd">60–75 min · tarde</div></div>
+      <div class="dc run"><div class="dn">Vie</div><span class="di">🏃</span><div class="dt">Running</div><div class="dd">5 km ayunas</div></div>
+      <div class="dc long"><div class="dn">Sáb</div><span class="di">🗺</span><div class="dt">Ruta larga</div><div class="dd">2,5–3 h Z1–Z2</div></div>
+      <div class="dc opt"><div class="dn">Dom</div><span class="di">🚴</span><div class="dt">Bici suave</div><div class="dd">opcional</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">← desliza para ver toda la semana →</div>
+  <div class="polar-bar">
+    <div class="pb-lbl">Distribución polarizada 80/20</div>
+    <div class="pb-track"><div class="pb-low"></div><div class="pb-high"></div></div>
+    <div class="pb-legend">
+      <span style="color:var(--cyan)">80% Zona 1–2 · base aeróbica y quema de grasas</span>
+      <span style="color:var(--amber)">20% Zona 4–5 · VO2max · solo miércoles</span>
+    </div>
+  </div>
+
+  <div class="slbl">Zonas de frecuencia cardíaca</div>
+  <div style="font-size:10px;color:var(--faint);margin-bottom:10px">Karvonen · FCmax ~189 ppm · FCrep ~65 ppm (medir al despertar 5 días)</div>
+  <div class="zone-list" style="margin-bottom:32px">
+    <div class="zone-row"><span class="zpill z1p">Z1</span><span class="zppm">&lt; 115 ppm</span><span class="zinfo">Recuperación entre intervalos · RPE 1–2</span></div>
+    <div class="zone-row"><span class="zpill z2p">Z2</span><span class="zppm" style="color:var(--cyan)">115–139</span><span class="zinfo" style="color:var(--cyan)">Base aeróbica · Fatmax · 80% del volumen</span></div>
+    <div class="zone-row"><span class="zpill z3p">Z3</span><span class="zppm">139–158</span><span class="zinfo">Evitar · aparece natural en puertos</span></div>
+    <div class="zone-row"><span class="zpill z4p">Z4</span><span class="zppm">158–177</span><span class="zinfo">Umbral de lactato · RPE 5–7</span></div>
+    <div class="zone-row"><span class="zpill z5p">Z5</span><span class="zppm" style="color:var(--red)">&gt; 177</span><span class="zinfo" style="color:var(--red)">Solo miércoles en intervalos</span></div>
+  </div>
+
+  <div class="slbl">Sesión miércoles — 4 × 4 min Z5</div>
+  <div class="sblocks">
+    <div class="sblk">
+      <div class="sblk-lbl">Calentamiento</div>
+      <div class="sblk-dur">20 min</div>
+      <div class="sblk-txt">Z1–Z2 progresivo. Min 18–20: 2–3 aceleraciones de 15–20 seg para activar el sistema neuromuscular.</div>
+    </div>
+    <div class="sblk main">
+      <div class="sblk-lbl">Bloque principal · &gt;177 ppm en los últimos 2 min</div>
+      <div class="sblk-dur">4 × 4 min Z5</div>
+      <div class="ibar">
+        <div class="ib-on"></div><div class="ib-off"></div>
+        <div class="ib-on"></div><div class="ib-off"></div>
+        <div class="ib-on"></div><div class="ib-off"></div>
+        <div class="ib-on"></div>
+      </div>
+      <div class="sblk-txt" style="color:var(--amber)">4 min esfuerzo Z5 · 3 min recuperación Z1 bajando cuesta</div>
+      <div class="notebox">Semanas 1–2: solo 3 intervalos. Añadir el 4º en semana 3 si acabas el 3º sin bajar la intensidad.</div>
+    </div>
+    <div class="sblk">
+      <div class="sblk-lbl">Vuelta a la calma</div>
+      <div class="sblk-dur">15 min</div>
+      <div class="sblk-txt">Z1 obligatorio. No saltarlo. Dentro de los 30 min al llegar: whey 30g + plátano.</div>
+    </div>
+  </div>
+  <div style="font-size:10px;color:var(--faint);margin-bottom:32px">Duración total: ~70–80 min · ~700 kcal · Máximo +10% volumen/semana · Bloques 3 semanas carga + 1 descarga</div>
+
+  <div class="ftrow">
+    <div class="ft"><div class="ft-val">~0,5 <span>kg/sem</span></div><div class="ft-lbl">pérdida de grasa</div></div>
+    <div class="ft"><div class="ft-val">6–8 <span>kg</span></div><div class="ft-lbl">en 12–16 semanas</div></div>
+    <div class="ft"><div class="ft-val">7–8 <span>h</span></div><div class="ft-lbl">volumen semanal</div></div>
+    <div class="ft"><div class="ft-val">80/20</div><div class="ft-lbl">distribución polarizada</div></div>
+  </div>
+  <div class="note-footer">Revisión a las 2–3 semanas · Test de campo en cuesta para ajustar zonas FC reales</div>
+
+</div>
+
+<!-- ═══ TAB MENÚ SEMANAL ═══ -->
+<div id="tab-menu" class="tab-panel">
+
+  <div class="slbl">Periodización de carbohidratos</div>
+  <div class="cho-scroll">
+    <div class="cho-row">
+      <div class="ccard"><div class="cday">Lun · Mar</div><div class="ctype">Descanso</div><div class="cbarwrap"><div class="cbar lv1" style="height:28%"></div></div><div class="cval" style="color:#9999BB">178–267</div><div class="cunit">g · 2–3 g/kg</div></div>
+      <div class="ccard"><div class="cday">Miércoles</div><div class="ctype">Intervalos Z5</div><div class="cbarwrap"><div class="cbar lv3" style="height:62%"></div></div><div class="cval" style="color:var(--amber)">267–356</div><div class="cunit">g · 3–4 g/kg</div></div>
+      <div class="ccard"><div class="cday">Jueves</div><div class="ctype">Bici Z2</div><div class="cbarwrap"><div class="cbar lv2" style="height:48%"></div></div><div class="cval" style="color:var(--cyan)">267–356</div><div class="cunit">g · 3–4 g/kg</div></div>
+      <div class="ccard"><div class="cday">Viernes</div><div class="ctype">Running + pre-carga</div><div class="cbarwrap"><div class="cbar lv3" style="height:60%"></div></div><div class="cval" style="color:var(--amber)">267–356</div><div class="cunit">g · cena = pre-sábado</div></div>
+      <div class="ccard"><div class="cday">Sábado</div><div class="ctype">Ruta larga</div><div class="cbarwrap"><div class="cbar lv4" style="height:100%"></div></div><div class="cval" style="color:var(--green)">445–535</div><div class="cunit">g · 5–6 g/kg</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">← desliza para ver todos los días →</div>
+  <div style="font-size:10px;color:var(--faint);margin-bottom:32px">El déficit semanal lo absorben los días de descanso. Los días de entrenamiento se come para rendir, no para restringir.</div>
+
+  <div class="slbl">Plan nutricional diario</div>
+  <div class="dgrid">
+
+    <div class="dcard">
+      <div class="dcard-h"><div class="dday">Lunes</div><span class="dbadge db-r">Descanso</span></div>
+      <div class="dcard-b">
+        <div class="mi"><div class="mn">Desayuno</div><div class="mc">Yogur griego 200g + avena 60g + plátano</div><div class="ma">+ 30g whey mezclado en el yogur</div></div>
+        <div class="mi"><div class="mn">Comida</div><div class="mc">Coliflor o brócoli + patata + lomo plancha</div><div class="ma">Mantener 3–4 trozos lomo. Patata 200g.</div></div>
+        <div class="mi"><div class="mn">Media tarde</div><div class="mc">2º batido whey 30g + 1 fruta</div></div>
+        <div class="mi"><div class="mn">Cena</div><div class="mc">Kebab pollo (fajita, cebolla, lechuga, tomate, yogur)</div><div class="ma">Pollo 170g. 2 tortillas si falta CHO.</div></div>
+      </div>
+      <div class="dcard-f"><span class="plbl">~168g P</span><div class="ptrk"><div class="pfill" style="width:94%;background:var(--green)"></div></div><span class="ppct" style="color:var(--green)">94%</span></div>
+      <div class="cholbl">CHO ~185g · añadir 2 piezas de fruta</div>
+    </div>
+
+    <div class="dcard">
+      <div class="dcard-h"><div class="dday">Martes</div><span class="dbadge db-r">Descanso</span></div>
+      <div class="dcard-b">
+        <div class="mi"><div class="mn">Desayuno</div><div class="mc">Yogur griego 200g + avena 60g + plátano</div><div class="ma">+ 30g whey</div></div>
+        <div class="mi"><div class="mn">Comida</div><div class="mc">Ensalada legumbres (atún, huevo, queso, tomate)</div><div class="ma">2 latas atún (160g) o 4 huevos totales</div></div>
+        <div class="mi"><div class="mn">Media tarde</div><div class="mc">2º batido whey 30g</div></div>
+        <div class="mi"><div class="mn">Cena</div><div class="mc">Verdura lunes + pescado blanco + patata o samfaina</div><div class="ma">Pescado 220–250g</div></div>
+      </div>
+      <div class="dcard-f"><span class="plbl">~150g P</span><div class="ptrk"><div class="pfill" style="width:84%;background:var(--amber)"></div></div><span class="ppct" style="color:var(--amber)">84%</span></div>
+      <div class="cholbl">CHO ~145g · añadir pan integral + fruta</div>
+    </div>
+
+    <div class="dcard">
+      <div class="dcard-h"><div class="dday">Miércoles</div><span class="dbadge db-h">Bici intervalos</span></div>
+      <div class="dcard-b">
+        <div class="mi"><div class="mn">Desayuno</div><div class="mc">Yogur griego 200g + avena 80g + plátano + miel</div><div class="ma">+ 30g whey · más avena que días de descanso</div></div>
+        <div class="mi"><div class="mn">Comida</div><div class="mc">Boloñesa con gnocchis o pastel de patata</div><div class="ma">Carne 200g · gnocchis 350g o pasta 130g seco</div></div>
+        <div class="mi"><div class="mn">Pre-entreno (~16h)</div><div class="mc" style="color:var(--amber)">Plátano + 2 tostadas con miel = ~45g CHO</div></div>
+        <div class="mi"><div class="mn">Post-entreno</div><div class="mc" style="color:var(--cyan)">Whey 30g dentro de los primeros 30 min + plátano</div></div>
+        <div class="mi"><div class="mn">Cena</div><div class="mc">Tomate + burrata + calamares + patata o boniato</div><div class="ma">Calamares 200g · boniato 250g</div></div>
+      </div>
+      <div class="dcard-f"><span class="plbl">~158g P</span><div class="ptrk"><div class="pfill" style="width:89%;background:var(--green)"></div></div><span class="ppct" style="color:var(--green)">89%</span></div>
+      <div class="cholbl">CHO ~270g · añadir fruta en comida si no se llega</div>
+    </div>
+
+    <div class="dcard crit">
+      <div class="dcard-h"><div class="dday">Jueves <span style="font-size:10px;color:var(--red);font-weight:400">⚠ crítico</span></div><span class="dbadge db-z">Bici Z2</span></div>
+      <div class="dcard-b">
+        <div class="mi"><div class="mn">Desayuno</div><div class="mc">Yogur griego 200g + avena 70g + plátano</div><div class="ma">+ 30g whey</div></div>
+        <div class="mi"><div class="mn">Comida</div><div class="mc">Ensalada pasta + samfaina del martes</div><div class="mr2">⚠ Añadir 1 lata atún (80g) — OBLIGATORIO</div></div>
+        <div class="mi"><div class="mn">Pre-entreno (~16h)</div><div class="mc" style="color:var(--amber)">Plátano + tostada = ~35g CHO</div></div>
+        <div class="mi"><div class="mn">Post-entreno</div><div class="mc" style="color:var(--cyan)">Whey 30g dentro de los primeros 30 min</div></div>
+        <div class="mi"><div class="mn">Cena</div><div class="mc">Judía verde + patata + tortilla francesa</div><div class="mr2">⚠ Tortilla de 3–4 huevos (no 2)</div></div>
+        <div class="alert-r">Sin estos dos cambios el día no llega a 65g de proteína. Son los únicos ajustes no opcionales de todo el plan.</div>
+      </div>
+      <div class="dcard-f" style="margin-top:4px"><span class="plbl">~132g P</span><div class="ptrk"><div class="pfill" style="width:74%;background:var(--amber)"></div></div><span class="ppct" style="color:var(--amber)">74%</span></div>
+      <div class="cholbl">CHO ~260g con ajustes</div>
+    </div>
+
+    <div class="dcard full">
+      <div class="dcard-h"><div class="dday">Viernes</div><span class="dbadge db-n">Running 5km · ayunas</span></div>
+      <div class="dcard-b">
+        <div class="fri-grid">
+          <div>
+            <div class="mi"><div class="mn">Antes de correr</div><div class="mc">Nada — mantener el ayuno</div><div class="ma">5 km Z2 en ayunas mejora la oxidación de grasas</div></div>
+            <div class="mi"><div class="mn">Post-running · desayuno</div><div class="mc">Yogur griego + avena 70g + plátano + 30g whey</div></div>
+          </div>
+          <div>
+            <div class="mi"><div class="mn">Comida</div><div class="mc">Verdura jueves + salmón</div><div class="ma">Salmón 220–250g · arroz 150g o pan integral</div></div>
+            <div class="mi"><div class="mn">Media tarde</div><div class="mc">2º whey 30g + fruta</div></div>
+          </div>
+          <div>
+            <div class="mi"><div class="mn">Cena — PRE-CARGA SÁBADO</div><div class="mc">Fajitas con boloñesa del miércoles</div><div class="mw">Boloñesa 200g + 2 tortillas grandes + arroz 150g o patata 250g. Sin grasas extra esta noche.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dcard-f"><span class="plbl">~148g P</span><div class="ptrk"><div class="pfill" style="width:83%;background:var(--amber)"></div></div><span class="ppct" style="color:var(--amber)">83%</span></div>
+      <div class="cholbl">CHO ~255g · cena del viernes = pre-carga del sábado</div>
+    </div>
+
+  </div>
+
+  <div class="slbl">Protocolo ruta larga — sábado</div>
+  <div class="sat-section">
+    <div class="sat-block">
+      <div class="st">Antes de salir</div>
+      <div class="si"><div class="si-lbl">Desayuno (sin madrugar)</div><div class="si-val">1–2 tostadas + mermelada + plátano + café + 30g whey</div><div class="si-note">La pre-carga real fue la cena del viernes</div></div>
+      <div class="si"><div class="si-lbl">Salida</div><div class="si-val">8:30 – 9:00 h · CHO objetivo: 445–535 g</div></div>
+    </div>
+    <div class="sat-block">
+      <div class="st">Durante la ruta</div>
+      <div class="si"><div class="si-lbl">CHO en ruta</div><div class="si-val">40–60 g / hora · empezar a los 30 min</div></div>
+      <div class="si"><div class="si-lbl">Fuentes</div><div class="si-val">Geles, plátanos, barritas, arroz con miel</div></div>
+      <div class="si"><div class="si-lbl">Hidratación</div><div class="si-val">500–750 ml / hora · electrolitos si hace calor</div></div>
+    </div>
+    <div class="sat-block">
+      <div class="st">Post-ruta</div>
+      <div class="si"><div class="si-lbl">Ventana</div><div class="si-val">Dentro de las primeras 2 horas</div></div>
+      <div class="si"><div class="si-lbl">Objetivos</div><div class="si-val">~100 g CHO + ~40 g proteína</div></div>
+      <div class="si"><div class="si-lbl">Ejemplo</div><div class="si-val">Pollo + arroz + verdura + fruta</div></div>
+    </div>
+  </div>
+
+  <div class="slbl">Protocolo whey — 2 tomas / día · 30 g cada una</div>
+  <div class="whey-scroll">
+    <div class="wgrid">
+      <div class="wcard"><div class="wday">Lunes · Martes</div><div class="wdose"><div class="wtime">1ª — desayuno</div><div class="wdesc">Mezclado en el yogur griego</div></div><div class="wdose"><div class="wtime">2ª — media tarde</div><div class="wdesc">Batido solo 15–16 h</div></div></div>
+      <div class="wcard"><div class="wday">Miércoles</div><div class="wdose"><div class="wtime">1ª — desayuno</div><div class="wdesc">Con el yogur griego</div></div><div class="wdose"><div class="wtime">2ª — post-intervalos</div><div class="wdesc">Dentro de 30 min</div></div></div>
+      <div class="wcard"><div class="wday">Jueves</div><div class="wdose"><div class="wtime">1ª — desayuno</div><div class="wdesc">Con el yogur griego</div></div><div class="wdose"><div class="wtime">2ª — post-bici Z2</div><div class="wdesc">Dentro de 30 min</div></div></div>
+      <div class="wcard"><div class="wday">Viernes</div><div class="wdose"><div class="wtime">1ª — post-running</div><div class="wdesc">Al volver, con desayuno</div></div><div class="wdose"><div class="wtime">2ª — media tarde</div><div class="wdesc">Si comida fue ligera</div></div></div>
+      <div class="wcard"><div class="wday">Sábado</div><div class="wdose"><div class="wtime">1ª — pre-ruta</div><div class="wdesc">Con el desayuno</div></div><div class="wdose"><div class="wtime">2ª — post-ruta</div><div class="wdesc">Ventana de recuperación</div></div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">← desliza para ver todos los días →</div>
+
+  <div class="ftrow">
+    <div class="ft"><div class="ft-val">~151 <span>g P</span></div><div class="ft-lbl">proteína media</div></div>
+    <div class="ft"><div class="ft-val">1,70 <span>g/kg</span></div><div class="ft-lbl">ratio efectivo</div></div>
+    <div class="ft"><div class="ft-val">2 <span>tomas</span></div><div class="ft-lbl">whey diarias</div></div>
+    <div class="ft"><div class="ft-val">Jue</div><div class="ft-lbl">único día crítico</div></div>
+  </div>
+  <div class="note-footer">Proteína objetivo: 178 g/día · Alcanzable con este menú: ~151 g/día<br>Rango 1,70 g/kg respaldado por evidencia científica</div>
+
+</div>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
