@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Plan Ciclismo — Jofre</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07080f;
+  --surface: #0d0f1a;
+  --surface2: #131520;
+  --surface3: #1a1d2e;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.13);
+  --text: #f0f0f8;
+  --muted: rgba(240,240,248,0.45);
+  --dim: rgba(240,240,248,0.22);
+  --z1: #00d4ff;
+  --z2: #00e676;
+  --ss: #ffb300;
+  --z4: #ff6d00;
+  --z5: #ff1744;
+  --nav-h: 60px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Outfit',sans-serif;font-weight:300;line-height:1.5;
+  overflow-x:hidden;
+  padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 16px);
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(var(--nav-h) + var(--safe-bottom));
+  background:rgba(10,11,20,0.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border-b);
+  display:flex;align-items:flex-start;
+  padding-top:4px;
+  z-index:100;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;padding:8px 4px;cursor:pointer;
+  transition:opacity .2s;
+  border:none;background:none;color:var(--muted);
+  font-family:'Outfit',sans-serif;font-size:10px;font-weight:400;
+  letter-spacing:.3px;
+}
+.nav-item.active{color:var(--z2);}
+.nav-icon{font-size:20px;line-height:1;transition:transform .2s;}
+.nav-item.active .nav-icon{transform:scale(1.15);}
+.nav-label{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;}
+
+/* ── SECTIONS ── */
+.section{display:none;}
+.section.active{display:block;}
+
+/* ── HERO / HEADER ── */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;
+  justify-content:flex-end;padding-bottom:40px;
+  position:relative;overflow:hidden;
+  padding-top:calc(var(--safe-top) + 20px);
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 120% 60% at 80% 30%,rgba(0,230,118,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 100% at 0% 80%,rgba(0,212,255,.05) 0%,transparent 50%),
+    radial-gradient(ellipse 60% 50% at 50% 100%,rgba(255,179,0,.06) 0%,transparent 50%);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:linear-gradient(to bottom,transparent,black 25%,black 75%,transparent);
+}
+.hero-inner{position:relative;z-index:2;padding:0 24px;}
+.hero-eyebrow{
+  font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:var(--z2);text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--z2);}
+.hero-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(64px,18vw,130px);line-height:.88;
+  letter-spacing:-2px;margin-bottom:32px;
+}
+.hero-title .l1{color:var(--text);}
+.hero-title .l2{-webkit-text-stroke:1.5px rgba(240,240,248,.25);color:transparent;}
+.hero-title .l3{color:var(--z2);text-shadow:0 0 50px rgba(0,230,118,.4);}
+.hero-strip{
+  display:flex;height:3px;border-radius:99px;gap:3px;
+  margin-bottom:28px;overflow:hidden;
+}
+.hero-strip div{flex:1;border-radius:99px;}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-b);border:1px solid var(--border-b);border-radius:4px;overflow:hidden;}
+.h-stat{background:var(--surface);padding:14px 16px;}
+.h-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;color:var(--text);}
+.h-stat-l{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+
+/* ── SHARED ── */
+.wrap{padding:0 16px;}
+@media(min-width:600px){.wrap{padding:0 32px;max-width:1000px;margin:0 auto;}}
+@media(min-width:1000px){.wrap{padding:0 64px;max-width:1480px;}}
+
+.sec-label{
+  font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:var(--dim);text-transform:uppercase;
+  padding:32px 0 20px;display:flex;align-items:center;gap:12px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border-b);}
+
+/* ── ZONES ── */
+.zones-grid{display:grid;grid-template-columns:1fr;gap:2px;}
+@media(min-width:500px){.zones-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:900px){.zones-grid{grid-template-columns:repeat(5,1fr);}}
+
+.z-card{
+  background:var(--surface);padding:24px 20px;
+  position:relative;overflow:hidden;
+  transition:background .2s;border-radius:2px;
+}
+.z-card:active{background:var(--surface2);}
+.z-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
+.z-card.zc1::after{background:var(--z1);}
+.z-card.zc2::after{background:var(--z2);}
+.z-card.zcs::after{background:var(--ss);}
+.z-card.zc4::after{background:var(--z4);}
+.z-card.zc5::after{background:var(--z5);}
+
+.z-dot{width:7px;height:7px;border-radius:50%;margin-bottom:16px;}
+.zc1 .z-dot{background:var(--z1);box-shadow:0 0 8px var(--z1);}
+.zc2 .z-dot{background:var(--z2);box-shadow:0 0 8px var(--z2);}
+.zcs .z-dot{background:var(--ss);box-shadow:0 0 8px var(--ss);}
+.zc4 .z-dot{background:var(--z4);box-shadow:0 0 8px var(--z4);}
+.zc5 .z-dot{background:var(--z5);box-shadow:0 0 8px var(--z5);}
+
+.z-name{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.z-ppm{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-1px;line-height:1;margin-bottom:12px;}
+.zc1 .z-ppm{color:var(--z1);}
+.zc2 .z-ppm{color:var(--z2);}
+.zcs .z-ppm{color:var(--ss);}
+.zc4 .z-ppm{color:var(--z4);}
+.zc5 .z-ppm{color:var(--z5);}
+.z-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.z-rpe{font-family:'Syne Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:1px;}
+
+/* ── BLOCK ── */
+.block-wrap{padding-bottom:20px;}
+.block-hd{
+  padding:28px 20px;position:relative;overflow:hidden;
+  margin-bottom:2px;border-radius:2px;
+}
+.b1 .block-hd{background:linear-gradient(135deg,rgba(0,230,118,.07) 0%,transparent 60%);border-top:1px solid rgba(0,230,118,.3);}
+.b2 .block-hd{background:linear-gradient(135deg,rgba(255,179,0,.07) 0%,transparent 60%);border-top:1px solid rgba(255,179,0,.3);}
+.b3 .block-hd{background:linear-gradient(135deg,rgba(255,23,68,.07) 0%,transparent 60%);border-top:1px solid rgba(255,23,68,.3);}
+.block-hd-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+.block-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(22px,5vw,32px);letter-spacing:-0.5px;}
+.b1 .block-title{color:var(--z2);}
+.b2 .block-title{color:var(--ss);}
+.b3 .block-title{color:var(--z5);}
+.block-vol-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.block-vol-n{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;letter-spacing:-1px;}
+.b1 .block-vol-n{color:var(--z2);}
+.b2 .block-vol-n{color:var(--ss);}
+.b3 .block-vol-n{color:var(--z5);}
+.block-vol-l{font-family:'Syne Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;}
+.block-hd-sub{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.65;max-width:560px;}
+.block-weeks-label{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:4px;}
+
+/* ── WEEK CARDS (mobile-first) ── */
+.week-cards{display:flex;flex-direction:column;gap:2px;margin-bottom:32px;}
+
+.week-card{background:var(--surface);border-radius:2px;overflow:hidden;}
+.week-card.unload{background:rgba(0,212,255,.04);}
+
+.week-card-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 18px;cursor:pointer;
+  border-bottom:1px solid transparent;
+  transition:background .2s;
+  gap:12px;
+  min-height:44px;
+}
+.week-card-head:active{background:var(--surface2);}
+.week-card.open .week-card-head{border-bottom-color:var(--border);}
+
+.week-card-left{display:flex;align-items:center;gap:12px;}
+.wk-num{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text);letter-spacing:-.5px;}
+.badge{
+  display:inline-block;padding:2px 8px;border-radius:2px;
+  font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;width:fit-content;
+}
+.badge-load{background:rgba(255,179,0,.15);color:var(--ss);border:1px solid rgba(255,179,0,.3);}
+.badge-peak{background:rgba(255,23,68,.15);color:var(--z5);border:1px solid rgba(255,23,68,.3);}
+.badge-unload{background:rgba(0,212,255,.1);color:var(--z1);border:1px solid rgba(0,212,255,.2);}
+
+.week-card-right{display:flex;align-items:center;gap:10px;}
+.wk-vol{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+.b1 .wk-vol{color:var(--z2);}
+.b2 .wk-vol{color:var(--ss);}
+.b3 .wk-vol{color:var(--z5);}
+.chevron{font-size:12px;color:var(--dim);transition:transform .3s;}
+.week-card.open .chevron{transform:rotate(180deg);}
+
+.week-sessions{display:none;flex-direction:column;gap:0;}
+.week-card.open .week-sessions{display:flex;}
+
+.session-row{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start;
+}
+.session-row:last-child{border-bottom:none;}
+.session-day{
+  font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);padding-top:4px;
+}
+
+.s-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:2px;
+  font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;width:fit-content;margin-bottom:5px;
+}
+.s-tag::before{content:'';display:block;width:4px;height:4px;border-radius:50%;}
+.tag-z2{background:rgba(0,230,118,.1);color:var(--z2);border:1px solid rgba(0,230,118,.25);}
+.tag-z2::before{background:var(--z2);}
+.tag-ss{background:rgba(255,179,0,.1);color:var(--ss);border:1px solid rgba(255,179,0,.25);}
+.tag-ss::before{background:var(--ss);}
+.tag-z5{background:rgba(255,23,68,.1);color:var(--z5);border:1px solid rgba(255,23,68,.25);}
+.tag-z5::before{background:var(--z5);}
+.tag-z4{background:rgba(255,109,0,.1);color:var(--z4);border:1px solid rgba(255,109,0,.25);}
+.tag-z4::before{background:var(--z4);}
+.tag-z1{background:rgba(0,212,255,.1);color:var(--z1);border:1px solid rgba(0,212,255,.25);}
+.tag-z1::before{background:var(--z1);}
+
+.s-main{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.3px;margin-bottom:2px;}
+.s-sub{font-size:11px;color:var(--muted);}
+
+/* ── DESKTOP TABLE (>= 768px) ── */
+@media(min-width:768px){
+  .week-cards{display:none;}
+  .week-table-wrap{display:block!important;}
+}
+.week-table-wrap{display:none;}
+.tbl{width:100%;border-collapse:separate;border-spacing:0 2px;}
+.tbl th{background:var(--surface2);padding:12px 16px;font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--dim);text-transform:uppercase;text-align:left;font-weight:400;}
+.tbl th:last-child{text-align:center;}
+.tbl tr.wr td{background:var(--surface);padding:18px 16px;vertical-align:top;transition:background .2s;}
+.tbl tr.wr:hover td{background:var(--surface2);}
+.tbl tr.ul td{background:rgba(0,212,255,.04);}
+.tbl td:first-child{border-radius:2px 0 0 2px;width:110px;}
+.tbl td:last-child{border-radius:0 2px 2px 0;text-align:center;width:90px;}
+.tbl-wid{display:flex;flex-direction:column;gap:4px;}
+.tbl-wnum{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text);letter-spacing:-.5px;}
+.sess{display:flex;flex-direction:column;gap:5px;}
+.tvol{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-1px;}
+.b1 .tvol{color:var(--z2);} .b2 .tvol{color:var(--ss);} .b3 .tvol{color:var(--z5);}
+.tvol-l{font-family:'Syne Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;}
+
+/* ── MENU SEMANAL ── */
+.menu-days{display:flex;flex-direction:column;gap:2px;}
+.menu-day-card{background:var(--surface);border-radius:2px;overflow:hidden;}
+.menu-day-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 18px;cursor:pointer;min-height:54px;
+  transition:background .2s;
+}
+.menu-day-head:active{background:var(--surface2);}
+.menu-day-card.open .menu-day-head{border-bottom:1px solid var(--border);}
+.menu-day-left{display:flex;align-items:center;gap:14px;}
+.day-name{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.3px;color:var(--text);}
+.day-type-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:99px;
+  font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+}
+.dtype-rest{background:rgba(255,255,255,.06);color:var(--dim);border:1px solid var(--border);}
+.dtype-low{background:rgba(0,212,255,.1);color:var(--z1);border:1px solid rgba(0,212,255,.25);}
+.dtype-med{background:rgba(0,230,118,.1);color:var(--z2);border:1px solid rgba(0,230,118,.25);}
+.dtype-high{background:rgba(255,179,0,.1);color:var(--ss);border:1px solid rgba(255,179,0,.25);}
+.dtype-vhigh{background:rgba(255,109,0,.1);color:var(--z4);border:1px solid rgba(255,109,0,.25);}
+.day-cho-pill{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
+  display:flex;align-items:center;gap:8px;
+}
+.menu-chevron{font-size:12px;color:var(--dim);transition:transform .3s;}
+.menu-day-card.open .menu-chevron{transform:rotate(180deg);}
+
+.menu-meals{display:none;flex-direction:column;gap:0;}
+.menu-day-card.open .menu-meals{display:flex;}
+
+.meal-block{padding:16px 18px;border-bottom:1px solid var(--border);}
+.meal-block:last-child{border-bottom:none;}
+.meal-time{
+  font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.meal-time::after{content:'';flex:1;height:1px;background:var(--border);}
+.meal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px;}
+.meal-items{display:flex;flex-direction:column;gap:2px;}
+.meal-item{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:flex-start;line-height:1.5;}
+.meal-item::before{content:'—';color:var(--dim);flex-shrink:0;font-size:10px;margin-top:2px;}
+.meal-note{
+  margin-top:10px;padding:8px 12px;border-radius:2px;
+  background:rgba(255,179,0,.07);border:1px solid rgba(255,179,0,.2);
+  font-size:11px;color:var(--ss);line-height:1.6;
+}
+.meal-note.blue{background:rgba(0,212,255,.07);border-color:rgba(0,212,255,.2);color:var(--z1);}
+.meal-note.green{background:rgba(0,230,118,.07);border-color:rgba(0,230,118,.2);color:var(--z2);}
+
+.meal-macros{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border);border:1px solid var(--border);
+  border-radius:2px;margin:12px 0 0;overflow:hidden;
+}
+.macro-cell{background:var(--surface2);padding:8px 10px;text-align:center;}
+.macro-v{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+.macro-l{font-family:'Syne Mono',monospace;font-size:7px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* ── NUTRICIÓN PERIODIZACIÓN ── */
+.nutr-grid{display:grid;grid-template-columns:1fr;gap:2px;}
+@media(min-width:500px){.nutr-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:900px){.nutr-grid{grid-template-columns:repeat(7,1fr);}}
+
+.n-card{background:var(--surface);padding:20px 16px;border-radius:2px;position:relative;overflow:hidden;transition:background .2s;}
+.n-card:active{background:var(--surface2);}
+.n-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.n-rest::before{background:rgba(255,255,255,.08);}
+.n-low::before{background:linear-gradient(90deg,var(--z1),transparent);}
+.n-med::before{background:linear-gradient(90deg,var(--z2),transparent);}
+.n-high::before{background:linear-gradient(90deg,var(--ss),transparent);}
+.n-vhigh::before{background:linear-gradient(90deg,var(--z4),transparent);}
+.n-day-name{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.n-level{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.3px;margin-bottom:4px;}
+.n-rest .n-level{color:var(--dim);}
+.n-low .n-level{color:var(--z1);}
+.n-med .n-level{color:var(--z2);}
+.n-high .n-level{color:var(--ss);}
+.n-vhigh .n-level{color:var(--z4);}
+.n-gkg{font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim);margin-bottom:8px;line-height:1.5;}
+.n-note{font-size:11px;color:var(--muted);line-height:1.6;padding-top:8px;border-top:1px solid var(--border);}
+
+/* ── REGLAS ── */
+.rules-grid{display:flex;flex-direction:column;gap:2px;}
+@media(min-width:700px){.rules-grid{display:grid;grid-template-columns:1fr 1fr;}}
+@media(min-width:1100px){.rules-grid{grid-template-columns:repeat(3,1fr);}}
+
+.rule-card{
+  background:var(--surface);padding:28px 24px;border-radius:2px;
+  display:flex;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;transition:background .2s;
+}
+.rule-card:active{background:var(--surface2);}
+.rule-card:nth-child(1){border-top:1px solid rgba(0,230,118,.3);}
+.rule-card:nth-child(2){border-top:1px solid rgba(255,179,0,.3);}
+.rule-card:nth-child(3){border-top:1px solid rgba(255,23,68,.3);}
+.rule-card:nth-child(4){border-top:1px solid rgba(0,212,255,.3);}
+.rule-card:nth-child(5){border-top:1px solid rgba(255,109,0,.3);}
+.rule-card:nth-child(6){border-top:1px solid rgba(255,255,255,.1);}
+.rule-icon{font-size:26px;}
+.rule-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+.rule-text{font-size:13px;color:var(--muted);line-height:1.75;}
+.rule-text strong{color:var(--text);font-weight:500;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.hero-eyebrow{animation:fadeUp .6s ease .1s both;}
+.hero-title{animation:fadeUp .6s ease .2s both;}
+.hero-strip{animation:fadeUp .6s ease .35s both;}
+.hero-stats{animation:fadeUp .6s ease .45s both;}
+</style>
+</head>
+<body>
+
+<!-- ═══ SECTION: PLAN ═══ -->
+<div class="section active" id="sec-plan">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Plan de entrenamiento ciclista · Jofre · 2026</div>
+      <div class="hero-title">
+        <div class="l1">PLAN</div>
+        <div class="l2">CICLIS-</div>
+        <div class="l3">MO 12S</div>
+      </div>
+      <div class="hero-strip">
+        <div style="background:var(--z1);box-shadow:0 0 10px var(--z1)"></div>
+        <div style="background:var(--z2);box-shadow:0 0 10px var(--z2)"></div>
+        <div style="background:var(--ss);box-shadow:0 0 10px var(--ss)"></div>
+        <div style="background:var(--z4);box-shadow:0 0 10px var(--z4)"></div>
+        <div style="background:var(--z5);box-shadow:0 0 10px var(--z5)"></div>
+      </div>
+      <div class="hero-stats">
+        <div class="h-stat"><div class="h-stat-n">3</div><div class="h-stat-l">Bloques</div></div>
+        <div class="h-stat"><div class="h-stat-n">193</div><div class="h-stat-l">FCmáx ppm</div></div>
+        <div class="h-stat"><div class="h-stat-n">7–9h</div><div class="h-stat-l">Vol. pico/sem</div></div>
+        <div class="h-stat"><div class="h-stat-n">89 kg</div><div class="h-stat-l">Peso actual</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- BLOQUE 1 -->
+    <div class="block-wrap b1">
+      <div class="sec-label">Bloque 1 · Semanas 1–4</div>
+      <div class="block-hd">
+        <div class="block-hd-top">
+          <div>
+            <div class="block-weeks-label">Semanas 1–4</div>
+            <div class="block-title">BASE Y ADAPTACIÓN</div>
+          </div>
+          <div class="block-vol-badge">
+            <div class="block-vol-l">volumen</div>
+            <div class="block-vol-n">4.5–6h</div>
+          </div>
+        </div>
+        <div class="block-hd-sub">El cuerpo se adapta al nuevo estímulo. Sweet Spot con 2 bloques crecientes. Semana 4 de descarga obligatoria.</div>
+      </div>
+
+      <!-- MOBILE: acordeón -->
+      <div class="week-cards">
+        <!-- SEM 1 -->
+        <div class="week-card b1">
+          <div class="week-card-head" onclick="toggleWeek(this)">
+            <div class="week-card-left"><span class="wk-num">SEM 1</span><span class="badge badge-load">Carga</span></div>
+            <div class="week-card-right"><span class="wk-vol">~4.5h</span><span class="chevron">▼</span></div>
+          </div>
+          <div class="week-sessions">
+            <div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 15 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~60 min total</div></div></div>
+            <div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">60 min</div><div class="s-sub">116–135 ppm · ritmo conversación</div></div></div>
+            <div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">4 × 4 min</div><div class="s-sub">175–183 ppm · 4 min rec · ~55 min</div></div></div>
+            <div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">2.5 h</div><div class="s-sub">116–135 ppm · salida 8:30h</div></div></div>
+          </div>
+        </div>
+        <!-- SEM 2 -->
+        <div class="week-card b1">
+          <div class="week-card-head" onclick="toggleWeek(this)">
+            <div class="week-card-left"><span class="wk-num">SEM 2</span><span class="badge badge-load">Carga</span></div>
+            <div class="week-card-right"><span class="wk-vol">~5h</span><span class="chevron">▼</span></div>
+          </div>
+          <div class="week-sessions">
+            <div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 18 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~65 min</div></div></div>
+            <div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">65 min</div><div class="s-sub">116–135 ppm</div></div></div>
+            <div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">4 × 4 min</div><div class="s-sub">175–183 ppm · 4 min rec · ~55 min</div></div></div>
+            <div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">2.5 h</div><div class="s-sub">116–135 ppm</div></div></div>
+          </div>
+        </div>
+        <!-- SEM 3 -->
+        <div class="week-card b1">
+          <div class="week-card-head" onclick="toggleWeek(this)">
+            <div class="week-card-left"><span class="wk-num">SEM 3</span><span class="badge badge-peak">Carga pico</span></div>
+            <div class="week-card-right"><span class="wk-vol">~6h</span><span class="chevron">▼</span></div>
+          </div>
+          <div class="week-sessions">
+            <div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 20 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~70 min</div></div></div>
+            <div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">70 min</div><div class="s-sub">116–135 ppm</div></div></div>
+            <div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">5 × 4 min</div><div class="s-sub">175–183 ppm · 4 min rec · ~65 min</div></div></div>
+            <div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3 h</div><div class="s-sub">116–135 ppm</div></div></div>
+          </div>
+        </div>
+        <!-- SEM 4 descarga -->
+        <div class="week-card b1 unload">
+          <div class="week-card-head" onclick="toggleWeek(this)">
+            <div class="week-card-left"><span class="wk-num">SEM 4</span><span class="badge badge-unload">Descarga</span></div>
+            <div class="week-card-right"><span class="wk-vol">~3.5h</span><span class="chevron">▼</span></div>
+          </div>
+          <div class="week-sessions">
+            <div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 12 min</div><div class="s-sub">Volumen reducido · asimilación</div></div></div>
+            <div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">45 min</div><div class="s-sub">Sesión corta</div></div></div>
+            <div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">3 × 4 min</div><div class="s-sub">Mantener estímulo neuromuscular</div></div></div>
+            <div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">1.5 h</div><div class="s-sub">Ruta corta y tranquila</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESKTOP: tabla -->
+      <div class="week-table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Sem.</th><th>Miércoles · Sweet Spot</th><th>Jueves · Z2</th><th>Viernes 15h · Z5</th><th>Sábado · Ruta</th><th>Vol.</th></tr></thead>
+          <tbody>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 1</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 15 min</div><div class="s-sub">158–170 ppm · 5 min rec</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">60 min</div><div class="s-sub">116–135 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">4 × 4 min</div><div class="s-sub">175–183 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">2.5 h</div></div></td><td><div class="tvol">~4.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 2</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 18 min</div><div class="s-sub">158–170 ppm · 5 min rec</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">65 min</div><div class="s-sub">116–135 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">4 × 4 min</div><div class="s-sub">175–183 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">2.5 h</div></div></td><td><div class="tvol">~5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 3</div><span class="badge badge-peak">Carga pico</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 20 min</div><div class="s-sub">158–170 ppm · 5 min rec</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">70 min</div><div class="s-sub">116–135 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">5 × 4 min</div><div class="s-sub">175–183 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3 h</div></div></td><td><div class="tvol">~6h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr ul"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 4</div><span class="badge badge-unload">Descarga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 12 min</div><div class="s-sub">Volumen reducido</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">45 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">3 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">1.5 h</div></div></td><td><div class="tvol">~3.5h</div><div class="tvol-l">semana</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BLOQUE 2 -->
+    <div class="block-wrap b2">
+      <div class="sec-label">Bloque 2 · Semanas 5–8</div>
+      <div class="block-hd">
+        <div class="block-hd-top">
+          <div><div class="block-weeks-label">Semanas 5–8</div><div class="block-title">DESARROLLO</div></div>
+          <div class="block-vol-badge"><div class="block-vol-l">volumen</div><div class="block-vol-n">5.5–7.5h</div></div>
+        </div>
+        <div class="block-hd-sub">Sweet Spot pasa a 3 bloques. Los Z5 aumentan en número. Solo avanza si el bloque 1 se completó dentro de rangos.</div>
+      </div>
+      <div class="week-cards">
+        <div class="week-card b2"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 5</span><span class="badge badge-load">Carga</span></div><div class="week-card-right"><span class="wk-vol">~6.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">3 × 15 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~80 min</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">70 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">5 × 4 min</div><div class="s-sub">175–183 ppm · ~65 min</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3 h</div><div class="s-sub">116–135 ppm</div></div></div></div></div>
+        <div class="week-card b2"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 6</span><span class="badge badge-load">Carga</span></div><div class="week-card-right"><span class="wk-vol">~7h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">3 × 18 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~90 min</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">75 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">5 × 4 min</div><div class="s-sub">175–183 ppm · ~65 min</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3 h</div><div class="s-sub">116–135 ppm</div></div></div></div></div>
+        <div class="week-card b2"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 7</span><span class="badge badge-peak">Carga pico</span></div><div class="week-card-right"><span class="wk-vol">~7.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">3 × 20 min</div><div class="s-sub">158–170 ppm · 5 min rec · ~100 min</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">75 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">6 × 4 min</div><div class="s-sub">175–183 ppm · ~75 min</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3.5 h</div><div class="s-sub">116–135 ppm</div></div></div></div></div>
+        <div class="week-card b2 unload"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 8</span><span class="badge badge-unload">Descarga</span></div><div class="week-card-right"><span class="wk-vol">~3.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 15 min</div><div class="s-sub">Volver a volumen bloque 1</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">45 min</div><div class="s-sub">Sesión corta</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">3 × 4 min</div><div class="s-sub">Mantener estímulo</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">1.5 h</div><div class="s-sub">Ruta corta</div></div></div></div></div>
+      </div>
+      <div class="week-table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Sem.</th><th>Miércoles · Sweet Spot</th><th>Jueves · Z2</th><th>Viernes 15h · Z5</th><th>Sábado · Ruta</th><th>Vol.</th></tr></thead>
+          <tbody>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 5</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">3 × 15 min</div><div class="s-sub">158–170 ppm · ~80 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">70 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">5 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3 h</div></div></td><td><div class="tvol">~6.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 6</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">3 × 18 min</div><div class="s-sub">158–170 ppm · ~90 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">75 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">5 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3 h</div></div></td><td><div class="tvol">~7h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 7</div><span class="badge badge-peak">Pico</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">3 × 20 min</div><div class="s-sub">158–170 ppm · ~100 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">75 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">6 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3.5 h</div></div></td><td><div class="tvol">~7.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr ul"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 8</div><span class="badge badge-unload">Descarga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 15 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">45 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">3 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">1.5 h</div></div></td><td><div class="tvol">~3.5h</div><div class="tvol-l">semana</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BLOQUE 3 -->
+    <div class="block-wrap b3">
+      <div class="sec-label">Bloque 3 · Semanas 9–12</div>
+      <div class="block-hd">
+        <div class="block-hd-top">
+          <div><div class="block-weeks-label">Semanas 9–12</div><div class="block-title">INTENSIFICACIÓN</div></div>
+          <div class="block-vol-badge"><div class="block-vol-l">volumen</div><div class="block-vol-n">6–9h</div></div>
+        </div>
+        <div class="block-hd-sub">Sweet Spot evoluciona a umbral Z4. Z5 cortos y explosivos. Solo si los bloques 1 y 2 se completaron correctamente.</div>
+      </div>
+      <div class="week-cards">
+        <div class="week-card b3"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 9</span><span class="badge badge-load">Carga</span></div><div class="week-card-right"><span class="wk-vol">~6.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-z4">Umbral Z4</div><div class="s-main">1 × 20 min</div><div class="s-sub">165–174 ppm · warm 15 + cool 10</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">75 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5 explosivo</div><div class="s-main">8 × 2 min</div><div class="s-sub">175–183 ppm · 2 min rec · ~50 min</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3 h</div><div class="s-sub">Últimos 20 min subir a Z3 si hay fuerza</div></div></div></div></div>
+        <div class="week-card b3"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 10</span><span class="badge badge-load">Carga</span></div><div class="week-card-right"><span class="wk-vol">~7.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-z4">Umbral Z4</div><div class="s-main">2 × 15 min</div><div class="s-sub">165–174 ppm · 5 min rec · ~65 min</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">75 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5 explosivo</div><div class="s-main">8 × 2 min</div><div class="s-sub">175–183 ppm · 2 min rec</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3.5 h</div><div class="s-sub">116–135 ppm</div></div></div></div></div>
+        <div class="week-card b3"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 11</span><span class="badge badge-peak">Carga pico</span></div><div class="week-card-right"><span class="wk-vol">~8.5h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-z4">Umbral Z4</div><div class="s-main">2 × 20 min</div><div class="s-sub">165–174 ppm · 5 min rec · ~80 min</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">75 min</div><div class="s-sub">116–135 ppm</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5 explosivo</div><div class="s-main">6 × 3 min</div><div class="s-sub">175–183 ppm · 3 min rec · ~55 min</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">3.5 h</div><div class="s-sub">116–135 ppm</div></div></div></div></div>
+        <div class="week-card b3 unload"><div class="week-card-head" onclick="toggleWeek(this)"><div class="week-card-left"><span class="wk-num">SEM 12</span><span class="badge badge-unload">Descarga</span></div><div class="week-card-right"><span class="wk-vol">~4h</span><span class="chevron">▼</span></div></div><div class="week-sessions"><div class="session-row"><div class="session-day">Miércoles</div><div><div class="s-tag tag-ss">Sweet Spot</div><div class="s-main">2 × 15 min</div><div class="s-sub">Volver a SS · mantenimiento</div></div></div><div class="session-row"><div class="session-day">Jueves</div><div><div class="s-tag tag-z2">Z2</div><div class="s-main">45 min</div><div class="s-sub">Sesión suave</div></div></div><div class="session-row"><div class="session-day">Viernes 15h</div><div><div class="s-tag tag-z5">Z5</div><div class="s-main">3 × 4 min</div><div class="s-sub">Frescura neuromuscular</div></div></div><div class="session-row"><div class="session-day">Sábado</div><div><div class="s-tag tag-z2">Ruta Z2</div><div class="s-main">2 h</div><div class="s-sub">Test de esfuerzo opcional al final</div></div></div></div></div>
+      </div>
+      <div class="week-table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Sem.</th><th>Miércoles · Umbral Z4</th><th>Jueves · Z2</th><th>Viernes 15h · Z5 explosivo</th><th>Sábado · Ruta</th><th>Vol.</th></tr></thead>
+          <tbody>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 9</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-z4">Umbral Z4</span><div class="s-main">1 × 20 min</div><div class="s-sub">165–174 ppm · warm 15</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">75 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5 exp.</span><div class="s-main">8 × 2 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3 h</div></div></td><td><div class="tvol">~6.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 10</div><span class="badge badge-load">Carga</span></div></td><td><div class="sess"><span class="s-tag tag-z4">Umbral Z4</span><div class="s-main">2 × 15 min</div><div class="s-sub">165–174 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">75 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5 exp.</span><div class="s-main">8 × 2 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3.5 h</div></div></td><td><div class="tvol">~7.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 11</div><span class="badge badge-peak">Pico</span></div></td><td><div class="sess"><span class="s-tag tag-z4">Umbral Z4</span><div class="s-main">2 × 20 min</div><div class="s-sub">165–174 ppm</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">75 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5 exp.</span><div class="s-main">6 × 3 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">3.5 h</div></div></td><td><div class="tvol">~8.5h</div><div class="tvol-l">semana</div></td></tr>
+            <tr class="wr ul"><td><div class="tbl-wid"><div class="tbl-wnum">SEM 12</div><span class="badge badge-unload">Descarga</span></div></td><td><div class="sess"><span class="s-tag tag-ss">Sweet Spot</span><div class="s-main">2 × 15 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Z2</span><div class="s-main">45 min</div></div></td><td><div class="sess"><span class="s-tag tag-z5">Z5</span><div class="s-main">3 × 4 min</div></div></td><td><div class="sess"><span class="s-tag tag-z2">Ruta Z2</span><div class="s-main">2 h</div></div></td><td><div class="tvol">~4h</div><div class="tvol-l">semana</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION: ZONAS ═══ -->
+<div class="section" id="sec-zonas">
+  <div class="wrap">
+    <div class="sec-label">Zonas de frecuencia cardíaca · FCmáx estimada 193 ppm</div>
+    <div class="zones-grid">
+      <div class="z-card zc1"><div class="z-dot"></div><div class="z-name">Zona 1 · Recuperación</div><div class="z-ppm">&lt;116 ppm</div><div class="z-desc">Pedaleo muy suave. Recuperación activa entre sesiones duras. Domingos opcionales.</div><div class="z-rpe">RPE 3–4 / 10 · Conversación fluida</div></div>
+      <div class="z-card zc2"><div class="z-dot"></div><div class="z-name">Zona 2 · Base aeróbica</div><div class="z-ppm">116–135 ppm</div><div class="z-desc">El pilar del plan. Combustible principal: grasa. Jueves y sábado. Puedes mantener conversación sin problema.</div><div class="z-rpe">RPE 5–6 / 10 · Conversación fácil</div></div>
+      <div class="z-card zcs"><div class="z-dot"></div><div class="z-name">Sweet Spot</div><div class="z-ppm">158–170 ppm</div><div class="z-desc">Zona más eficiente para mejorar FTP. Duele pero es sostenible 15–20 min. Miércoles en bloques 1 y 2.</div><div class="z-rpe">RPE 7–8 / 10 · Frases cortas solo</div></div>
+      <div class="z-card zc4"><div class="z-dot"></div><div class="z-name">Umbral Z4</div><div class="z-ppm">165–174 ppm</div><div class="z-desc">Máxima exigencia sostenida. Solo en bloque 3. Necesitas la base de los dos bloques anteriores.</div><div class="z-rpe">RPE 8–9 / 10 · Solo palabras sueltas</div></div>
+      <div class="z-card zc5"><div class="z-dot"></div><div class="z-name">Zona 5 · VO₂máx</div><div class="z-ppm">175–183 ppm</div><div class="z-desc">Intervalos 4×4 min (bloques 1–2) o 8×2 min/6×3 min (bloque 3). No se puede hablar.</div><div class="z-rpe">RPE 9–10 / 10 · Imposible hablar</div></div>
+    </div>
+    <div style="height:32px"></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION: MENÚ ═══ -->
+<div class="section" id="sec-menu">
+  <div class="wrap">
+    <div class="sec-label">Menú semanal · Basado en disponibilidad y objetivos</div>
+    <div class="menu-days">
+
+      <!-- LUNES -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Lunes</span><span class="day-type-tag dtype-rest">Descanso</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno</div>
+            <div class="meal-title">Desayuno base fijo</div>
+            <div class="meal-items">
+              <div class="meal-item">Yogur griego natural 200 g</div>
+              <div class="meal-item">Avena en copos 60 g</div>
+              <div class="meal-item">Plátano mediano 1 ud</div>
+              <div class="meal-item">Whey proteína 30 g (mezclar con agua o yogur)</div>
+            </div>
+            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~490</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">42g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">60g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">grasa</div></div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida</div>
+            <div class="meal-title">Proteína + verduras + CHO bajo</div>
+            <div class="meal-items">
+              <div class="meal-item">Pechuga de pollo 200 g (a la plancha)</div>
+              <div class="meal-item">Ensalada variada abundante (lechuga, tomate, pepino, zanahoria)</div>
+              <div class="meal-item">Aceite de oliva 15 ml</div>
+              <div class="meal-item">1 rebanada pan integral</div>
+            </div>
+            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~420</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">48g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">18g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">16g</div><div class="macro-l">grasa</div></div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌤️ Merienda</div>
+            <div class="meal-title">Proteína + grasa saludable</div>
+            <div class="meal-items">
+              <div class="meal-item">Whey proteína 30 g</div>
+              <div class="meal-item">Puñado de nueces o almendras 25 g</div>
+            </div>
+            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~260</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">28g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">13g</div><div class="macro-l">grasa</div></div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌙 Cena</div>
+            <div class="meal-title">Proteína + verduras — Sleep low</div>
+            <div class="meal-items">
+              <div class="meal-item">Merluza o bacalao 200 g (al horno)</div>
+              <div class="meal-item">Brócoli + judías verdes salteados</div>
+              <div class="meal-item">2 huevos revueltos o tortilla</div>
+              <div class="meal-item">Aceite de oliva 10 ml</div>
+            </div>
+            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~420</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">52g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">18g</div><div class="macro-l">grasa</div></div></div>
+            <div class="meal-note blue">Sleep low: cena baja en CHO para maximizar oxidación de grasa durante la noche.</div>
+          </div>
+          <div class="meal-block"><div class="meal-macros" style="margin:0"><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~1590</div><div class="macro-l">kcal total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">170g</div><div class="macro-l">prot total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~94g</div><div class="macro-l">CHO total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~55g</div><div class="macro-l">grasa total</div></div></div></div>
+        </div>
+      </div>
+
+      <!-- MARTES -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Martes</span><span class="day-type-tag dtype-rest">Descanso</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego natural 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida</div><div class="meal-title">Huevos + verduras + legumbre</div><div class="meal-items"><div class="meal-item">3 huevos (revueltos, tortilla o cocidos)</div><div class="meal-item">Espinacas + champiñones salteados</div><div class="meal-item">Lentejas o garbanzos 80 g (cocinados)</div><div class="meal-item">Aceite de oliva 15 ml</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌤️ Merienda</div><div class="meal-title">Proteína rápida</div><div class="meal-items"><div class="meal-item">Whey 30 g + agua</div><div class="meal-item">Manzana o pera 1 ud</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena</div><div class="meal-title">Pollo + verduras — Sleep low</div><div class="meal-items"><div class="meal-item">Pechuga de pollo 180 g</div><div class="meal-item">Calabacín + pimiento salteado</div><div class="meal-item">Queso fresco 60 g</div></div><div class="meal-note blue">Segundo día de sleep low. Déficit activo máximo.</div></div>
+        </div>
+      </div>
+
+      <!-- MIÉRCOLES -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Miércoles</span><span class="day-type-tag dtype-high">Alta CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno — Carga CHO</div><div class="meal-title">Desayuno base + extra carbos</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 80 g (más cantidad)</div><div class="meal-item">Plátano 1 ud + miel 15 g</div><div class="meal-item">Whey 30 g</div></div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida — Pre-entreno (tarde)</div><div class="meal-title">Pasta + proteína magra</div><div class="meal-items"><div class="meal-item">Pasta integral 120 g (peso seco)</div><div class="meal-item">Atún al natural 2 latas (160 g)</div><div class="meal-item">Tomate triturado + aceite de oliva</div><div class="meal-item">Parmesano rallado 20 g</div></div><div class="meal-note">Comer 2.5–3h antes del entreno de tarde. Los carbos tienen tiempo de almacenarse como glucógeno.</div></div>
+          <div class="meal-block"><div class="meal-time">🚴 Pre-entreno (30–45 min antes)</div><div class="meal-title">Boost rápido</div><div class="meal-items"><div class="meal-item">Plátano maduro 1 ud</div><div class="meal-item">1 tostada con mermelada (opcional)</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena — Post Sweet Spot</div><div class="meal-title">Recuperación: arroz + proteína</div><div class="meal-items"><div class="meal-item">Arroz blanco 100 g (peso seco)</div><div class="meal-item">Pechuga de pollo 200 g</div><div class="meal-item">Verduras al vapor</div><div class="meal-item">Whey 30 g (si falta proteína)</div></div><div class="meal-note green">Post-entreno: tomar dentro de los 30–45 min después de terminar. Ventana anabólica activa.</div></div>
+        </div>
+      </div>
+
+      <!-- JUEVES -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Jueves ⚡</span><span class="day-type-tag dtype-med">Día crítico</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z2)">3–4 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida — Crítica (pre-entreno tarde)</div><div class="meal-title">Pasta de atún — La comida más importante del día</div><div class="meal-items"><div class="meal-item">Pasta 100 g (peso seco)</div><div class="meal-item">Atún al natural 2 latas (160 g)</div><div class="meal-item">Tomate + aceite + orégano</div></div><div class="meal-note">Este plato es el núcleo del jueves: recarga el glucógeno gastado el miércoles y carga para el entreno Z2 de tarde.</div></div>
+          <div class="meal-block"><div class="meal-time">🚴 Pre-entreno Z2 (30 min antes)</div><div class="meal-title">Carbos de fácil digestión</div><div class="meal-items"><div class="meal-item">Plátano 1 ud</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena — Post Z2</div><div class="meal-title">Tortilla + patata — Proteína alta</div><div class="meal-items"><div class="meal-item">3–4 huevos (tortilla española o francesa)</div><div class="meal-item">Patata mediana 150 g (cocida o asada)</div><div class="meal-item">Espinacas salteadas</div><div class="meal-item">Aceite de oliva 10 ml</div></div><div class="meal-note green">La patata aquí es la pre-carga para el viernes de intervalos. No la quites.</div></div>
+        </div>
+      </div>
+
+      <!-- VIERNES -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Viernes</span><span class="day-type-tag dtype-high">Alta CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno — Carga pre-Z5</div><div class="meal-title">Desayuno base + carbos extra</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 80 g</div><div class="meal-item">Plátano 1 ud + miel 15 g</div><div class="meal-item">Whey 30 g</div></div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida (antes de salir a las 15h)</div><div class="meal-title">Arroz + pollo — Carga pre-Z5</div><div class="meal-items"><div class="meal-item">Arroz blanco 120 g (peso seco)</div><div class="meal-item">Pollo 180 g</div><div class="meal-item">Verduras al vapor</div></div><div class="meal-note">Comer a las 12:30–13:00. Los intervalos Z5 exigen glucógeno disponible — no te saltes esta comida.</div></div>
+          <div class="meal-block"><div class="meal-time">🚴 Pre-Z5 (30–45 min antes, ~14:15h)</div><div class="meal-title">Activación rápida</div><div class="meal-items"><div class="meal-item">Plátano maduro 1 ud</div><div class="meal-item">Café (opcional, mejora rendimiento en Z5)</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena — PRE-CARGA SÁBADO</div><div class="meal-title">Cena de carga — La más importante de la semana</div><div class="meal-items"><div class="meal-item">Arroz blanco 150 g (peso seco) O patata 350 g</div><div class="meal-item">Pollo o salmón 200 g</div><div class="meal-item">Aceite de oliva 15 ml</div><div class="meal-item">Verdura mínima (no llenar con fibra)</div></div><div class="meal-note">Esta cena carga el glucógeno muscular para la ruta del sábado. No la reduzcas. El extra de CHO es necesario.</div></div>
+        </div>
+      </div>
+
+      <!-- SÁBADO -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Sábado 🚴</span><span class="day-type-tag dtype-vhigh">Muy alta CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z4)">5–6 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno pre-ruta (7:30–8:00h)</div><div class="meal-title">Desayuno ligero y digestivo — Salida 8:30h</div><div class="meal-items"><div class="meal-item">Tostadas de pan blanco 3 rebanadas + mermelada</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g + agua (no con leche, más rápido)</div><div class="meal-item">Café</div></div><div class="meal-note">Pan blanco (no integral) — digestión más rápida. Sale a rodar en 30–60 min, sin sensación de pesadez.</div></div>
+          <div class="meal-block"><div class="meal-time">🚴 En ruta — Cada 45 minutos</div><div class="meal-title">Nutrición en carretera</div><div class="meal-items"><div class="meal-item">1 gel energético cada 45 min (a partir del km 30–40)</div><div class="meal-item">O barrita de dátiles/cereales cada 45 min</div><div class="meal-item">500 ml agua cada hora mínimo</div><div class="meal-item">Electrolitos si hace calor o ruta +2.5h</div></div><div class="meal-note">Para rutas de 2.5–3h: mínimo 2–3 geles. Si no comes en ruta, la ruta acaba en Z1 aunque quieras Z2.</div></div>
+          <div class="meal-block"><div class="meal-time">🏁 Post-ruta — Primeros 30 min</div><div class="meal-title">Recuperación inmediata</div><div class="meal-items"><div class="meal-item">Whey 30 g + agua — inmediatamente al llegar</div><div class="meal-item">Plátano o fruta</div></div><div class="meal-note green">Los primeros 30 min post-ejercicio son la ventana más importante para recuperación muscular.</div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida post-ruta</div><div class="meal-title">Carga de recuperación completa</div><div class="meal-items"><div class="meal-item">Pasta o arroz 150 g (peso seco)</div><div class="meal-item">Proteína magra 200 g (pollo, atún, salmón)</div><div class="meal-item">Verdura variada</div><div class="meal-item">Aceite de oliva generoso</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena</div><div class="meal-title">Normal — No sobrecargar</div><div class="meal-items"><div class="meal-item">Tortilla 2–3 huevos o pescado</div><div class="meal-item">Ensalada o verdura</div><div class="meal-item">Pan integral 1–2 rebanadas</div></div></div>
+        </div>
+      </div>
+
+      <!-- DOMINGO -->
+      <div class="menu-day-card">
+        <div class="menu-day-head" onclick="toggleMenu(this)">
+          <div class="menu-day-left"><span class="day-name">Domingo</span><span class="day-type-tag dtype-low">Baja CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z1)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+        </div>
+        <div class="menu-meals">
+          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
+          <div class="meal-block"><div class="meal-time">☀️ Comida</div><div class="meal-title">Proteína + legumbre + poca fécula</div><div class="meal-items"><div class="meal-item">Salmón 180 g o pollo 200 g</div><div class="meal-item">Lentejas o garbanzos 100 g (cocinados)</div><div class="meal-item">Ensalada verde abundante</div><div class="meal-item">Aceite de oliva 15 ml</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌤️ Merienda (si hay rodada suave Z1)</div><div class="meal-title">Proteína ligera</div><div class="meal-items"><div class="meal-item">Whey 30 g</div><div class="meal-item">Fruta pequeña</div></div></div>
+          <div class="meal-block"><div class="meal-time">🌙 Cena — Sleep low</div><div class="meal-title">Alta proteína, mínimo CHO</div><div class="meal-items"><div class="meal-item">3 huevos (tortilla o revueltos)</div><div class="meal-item">Queso fresco 80 g</div><div class="meal-item">Espárragos o brócoli</div><div class="meal-item">Sin pan, sin fécula</div></div><div class="meal-note blue">Máximo déficit del fin de semana. El domingo es el día con más margen para profundizar en la pérdida de grasa.</div></div>
+        </div>
+      </div>
+
+    </div>
+    <div style="height:32px"></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION: NUTRICIÓN ═══ -->
+<div class="section" id="sec-nutr">
+  <div class="wrap">
+    <div class="sec-label">Periodización de carbohidratos · 89 kg · déficit ~500 kcal/día</div>
+    <div class="nutr-grid">
+      <div class="n-card n-rest"><div class="n-day-name">Lunes</div><div class="n-level">MÍNIMA</div><div class="n-gkg">2–3 g/kg<br>178–267 g CHO</div><div class="n-note">Descanso. Maximizar oxidación de grasa. Sleep low obligatorio en cena.</div></div>
+      <div class="n-card n-rest"><div class="n-day-name">Martes</div><div class="n-level">MÍNIMA</div><div class="n-gkg">2–3 g/kg<br>178–267 g CHO</div><div class="n-note">Descanso. Déficit activo máximo. Sleep low.</div></div>
+      <div class="n-card n-high"><div class="n-day-name">Miércoles</div><div class="n-level">ALTA</div><div class="n-gkg">4–5 g/kg<br>356–445 g CHO</div><div class="n-note">Sweet Spot / Umbral. Pasta en comida + carbos post-entreno en cena.</div></div>
+      <div class="n-card n-med"><div class="n-day-name">Jueves</div><div class="n-level">MODERADA</div><div class="n-gkg">3–4 g/kg<br>267–356 g CHO</div><div class="n-note">Día crítico. Pasta atún en comida + tortilla/patata en cena.</div></div>
+      <div class="n-card n-high"><div class="n-day-name">Viernes</div><div class="n-level">ALTA</div><div class="n-gkg">4–5 g/kg<br>356–445 g CHO</div><div class="n-note">Z5 + pre-carga para sábado. Cena con arroz 150g o patata 350g.</div></div>
+      <div class="n-card n-vhigh"><div class="n-day-name">Sábado</div><div class="n-level">MUY ALTA</div><div class="n-gkg">5–6 g/kg<br>445–534 g CHO</div><div class="n-note">Ruta larga. Geles en carretera. Mayor ingesta de la semana.</div></div>
+      <div class="n-card n-low"><div class="n-day-name">Domingo</div><div class="n-level">BAJA</div><div class="n-gkg">2–3 g/kg<br>178–267 g CHO</div><div class="n-note">Recuperación opcional Z1. Déficit máximo del fin de semana.</div></div>
+    </div>
+
+    <div class="sec-label" style="margin-top:32px">Proteína diaria · objetivo 151 g/día (1.70 g/kg)</div>
+    <div style="background:var(--surface);border-radius:2px;padding:24px 20px;display:flex;flex-direction:column;gap:16px;">
+      <div style="font-size:13px;color:var(--muted);line-height:1.75;">Distribuida en <strong style="color:var(--text)">4 tomas</strong>: desayuno (whey 30g + yogur), comida (pollo/pescado/huevos), merienda (whey 30g), cena (proteína principal). Las 2 tomas de whey suman 60g de proteína asegurada.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:var(--surface2);padding:14px;border-radius:2px;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--z2)">2 × 30g</div><div style="font-family:'Syne Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px">whey diarias</div></div>
+        <div style="background:var(--surface2);padding:14px;border-radius:2px;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--ss)">~2450</div><div style="font-family:'Syne Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px">kcal objetivo</div></div>
+      </div>
+    </div>
+    <div style="height:32px"></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION: REGLAS ═══ -->
+<div class="section" id="sec-reglas">
+  <div class="wrap">
+    <div class="sec-label">Reglas del plan · seguir estrictamente</div>
+    <div class="rules-grid">
+      <div class="rule-card"><div class="rule-icon">📈</div><div class="rule-title">Cuándo progresar</div><div class="rule-text">Solo avanzas a más carga si <strong>completas la sesión dentro del rango de FC</strong>. Si la FC se dispara antes de acabar, repites la misma carga la semana siguiente. No avanzas por calendario.</div></div>
+      <div class="rule-card"><div class="rule-icon">🔋</div><div class="rule-title">Descargas obligatorias</div><div class="rule-text">Semanas <strong>4, 8 y 12 no son opcionales</strong>. El cuerpo asimila las adaptaciones en la descarga. Saltársela es el error más común. El domingo siempre puede convertirse en descanso completo.</div></div>
+      <div class="rule-card"><div class="rule-icon">⚠️</div><div class="rule-title">Condición bloque 3</div><div class="rule-text">El umbral Z4 <strong>solo si los bloques 1 y 2 se completaron bien</strong>. Si hay fatiga residual alta, extiende el bloque 2 una semana antes de pasar al 3. No es una debilidad, es inteligencia.</div></div>
+      <div class="rule-card"><div class="rule-icon">🍽️</div><div class="rule-title">Nutrición en descarga</div><div class="rule-text">En semanas de descarga <strong>puedes aumentar el déficit a ~600 kcal</strong>. En el bloque 3, reduce el déficit a ~300 kcal para proteger el rendimiento en las sesiones de umbral.</div></div>
+      <div class="rule-card"><div class="rule-icon">❤️</div><div class="rule-title">FC máxima real</div><div class="rule-text">Los 193 ppm son una <strong>estimación (220−27)</strong>. Si en Z5 registras un máximo diferente en el Garmin, actualiza todas las zonas con ese valor. Las zonas sobre FCmáx real son siempre más precisas.</div></div>
+      <div class="rule-card"><div class="rule-icon">🚨</div><div class="rule-title">Señales de alarma</div><div class="rule-text">Con déficit calórico el sobreentrenamiento llega antes. Señales: <strong>FC reposo +5–7 ppm, piernas sin respuesta en Z2, insomnio, irritabilidad</strong>. Dos señales = descanso extra + reducir carga.</div></div>
+    </div>
+    <div style="height:32px"></div>
+  </div>
+</div>
+
+<!-- ═══ BOTTOM NAVIGATION ═══ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showSection('plan', this)">
+    <span class="nav-icon">🚴</span>
+    <span class="nav-label">Plan</span>
+  </button>
+  <button class="nav-item" onclick="showSection('zonas', this)">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Zonas</span>
+  </button>
+  <button class="nav-item" onclick="showSection('menu', this)">
+    <span class="nav-icon">🍽️</span>
+    <span class="nav-label">Menú</span>
+  </button>
+  <button class="nav-item" onclick="showSection('nutr', this)">
+    <span class="nav-icon">💊</span>
+    <span class="nav-label">Nutrición</span>
+  </button>
+  <button class="nav-item" onclick="showSection('reglas', this)">
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">Reglas</span>
+  </button>
+</nav>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function toggleWeek(head) {
+  const card = head.closest('.week-card');
+  card.classList.toggle('open');
+}
+
+function toggleMenu(head) {
+  const card = head.closest('.menu-day-card');
+  const isOpen = card.classList.contains('open');
+  // close all first
+  document.querySelectorAll('.menu-day-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+</script>
+</body>
+</html>
