@@ -584,145 +584,305 @@ body{
 <!-- ═══ SECTION: MENÚ ═══ -->
 <div class="section" id="sec-menu">
   <div class="wrap">
-    <div class="sec-label">Menú semanal · Basado en disponibilidad y objetivos</div>
+    <div class="sec-label">Menú semanal · Lunes a viernes con pareja · Fines de semana flexibles</div>
     <div class="menu-days">
 
       <!-- LUNES -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Lunes</span><span class="day-type-tag dtype-rest">Descanso</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Lunes</span><span class="day-type-tag dtype-rest">Descanso · Baja CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
           <div class="meal-block">
-            <div class="meal-time">🌅 Desayuno</div>
-            <div class="meal-title">Desayuno base fijo</div>
+            <div class="meal-time">🌅 Desayuno — 2 opciones</div>
+            <div class="meal-title">Opción A: Bocadillo</div>
             <div class="meal-items">
-              <div class="meal-item">Yogur griego natural 200 g</div>
-              <div class="meal-item">Avena en copos 60 g</div>
-              <div class="meal-item">Plátano mediano 1 ud</div>
-              <div class="meal-item">Whey proteína 30 g (mezclar con agua o yogur)</div>
+              <div class="meal-item">Pan (bocadillo mediano)</div>
+              <div class="meal-item">Jamón serrano O jamón pavo al gusto</div>
+              <div class="meal-item">Whey 30 g aparte (batido con agua)</div>
             </div>
-            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~490</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">42g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">60g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">grasa</div></div></div>
+            <div class="meal-title" style="margin-top:10px">Opción B: Base clásica</div>
+            <div class="meal-items">
+              <div class="meal-item">Yogur griego 200 g + avena 60 g + plátano + whey 30 g</div>
+            </div>
           </div>
           <div class="meal-block">
             <div class="meal-time">☀️ Comida</div>
-            <div class="meal-title">Proteína + verduras + CHO bajo</div>
+            <div class="meal-title">Coliflor o brócoli + lomo a la plancha</div>
             <div class="meal-items">
-              <div class="meal-item">Pechuga de pollo 200 g (a la plancha)</div>
-              <div class="meal-item">Ensalada variada abundante (lechuga, tomate, pepino, zanahoria)</div>
-              <div class="meal-item">Aceite de oliva 15 ml</div>
-              <div class="meal-item">1 rebanada pan integral</div>
+              <div class="meal-item">Lomo a la plancha — 3–4 trozos (~180 g)</div>
+              <div class="meal-item">Patata cocida 200 g</div>
+              <div class="meal-item">Coliflor o brócoli (libre)</div>
             </div>
-            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~420</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">48g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">18g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">16g</div><div class="macro-l">grasa</div></div></div>
           </div>
           <div class="meal-block">
             <div class="meal-time">🌤️ Merienda</div>
-            <div class="meal-title">Proteína + grasa saludable</div>
-            <div class="meal-items">
-              <div class="meal-item">Whey proteína 30 g</div>
-              <div class="meal-item">Puñado de nueces o almendras 25 g</div>
-            </div>
-            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~260</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">28g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">13g</div><div class="macro-l">grasa</div></div></div>
+            <div class="meal-items"><div class="meal-item">Whey 30 g</div></div>
           </div>
           <div class="meal-block">
             <div class="meal-time">🌙 Cena</div>
-            <div class="meal-title">Proteína + verduras — Sleep low</div>
+            <div class="meal-title">Kebab saludable</div>
             <div class="meal-items">
-              <div class="meal-item">Merluza o bacalao 200 g (al horno)</div>
-              <div class="meal-item">Brócoli + judías verdes salteados</div>
-              <div class="meal-item">2 huevos revueltos o tortilla</div>
-              <div class="meal-item">Aceite de oliva 10 ml</div>
+              <div class="meal-item">1 tortilla de trigo (fajita)</div>
+              <div class="meal-item">Pollo a la plancha 150 g</div>
+              <div class="meal-item">Cebolla + lechuga + tomate (libre)</div>
+              <div class="meal-item">Salsa yogur y especias al gusto</div>
             </div>
-            <div class="meal-macros"><div class="macro-cell"><div class="macro-v">~420</div><div class="macro-l">kcal</div></div><div class="macro-cell"><div class="macro-v">52g</div><div class="macro-l">prot</div></div><div class="macro-cell"><div class="macro-v">8g</div><div class="macro-l">cho</div></div><div class="macro-cell"><div class="macro-v">18g</div><div class="macro-l">grasa</div></div></div>
-            <div class="meal-note blue">Sleep low: cena baja en CHO para maximizar oxidación de grasa durante la noche.</div>
+            <div class="meal-note blue">Día de descanso. Cena moderada en CHO — la tortilla de trigo ya aporta suficiente.</div>
           </div>
-          <div class="meal-block"><div class="meal-macros" style="margin:0"><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~1590</div><div class="macro-l">kcal total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">170g</div><div class="macro-l">prot total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~94g</div><div class="macro-l">CHO total</div></div><div class="macro-cell" style="background:rgba(0,212,255,.08)"><div class="macro-v" style="color:var(--z1)">~55g</div><div class="macro-l">grasa total</div></div></div></div>
         </div>
       </div>
 
       <!-- MARTES -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Martes</span><span class="day-type-tag dtype-rest">Descanso</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Martes</span><span class="day-type-tag dtype-rest">Descanso · Baja CHO</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--dim)">2–3 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego natural 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida</div><div class="meal-title">Huevos + verduras + legumbre</div><div class="meal-items"><div class="meal-item">3 huevos (revueltos, tortilla o cocidos)</div><div class="meal-item">Espinacas + champiñones salteados</div><div class="meal-item">Lentejas o garbanzos 80 g (cocinados)</div><div class="meal-item">Aceite de oliva 15 ml</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌤️ Merienda</div><div class="meal-title">Proteína rápida</div><div class="meal-items"><div class="meal-item">Whey 30 g + agua</div><div class="meal-item">Manzana o pera 1 ud</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena</div><div class="meal-title">Pollo + verduras — Sleep low</div><div class="meal-items"><div class="meal-item">Pechuga de pollo 180 g</div><div class="meal-item">Calabacín + pimiento salteado</div><div class="meal-item">Queso fresco 60 g</div></div><div class="meal-note blue">Segundo día de sleep low. Déficit activo máximo.</div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno</div>
+            <div class="meal-title">Igual que lunes (opción A o B)</div>
+            <div class="meal-items"><div class="meal-item">Bocadillo jamón serrano/pavo + whey 30 g</div><div class="meal-item">O yogur griego 200 g + avena 60 g + plátano + whey 30 g</div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida</div>
+            <div class="meal-title">Ensalada de legumbres</div>
+            <div class="meal-items">
+              <div class="meal-item">Legumbres cocidas 150 g (garbanzos, alubias blancas…)</div>
+              <div class="meal-item">Atún al natural 1–2 latas (80–160 g)</div>
+              <div class="meal-item">1–2 huevos cocidos</div>
+              <div class="meal-item">Queso ~30 g</div>
+              <div class="meal-item">Lechuga + tomate (libre)</div>
+            </div>
+            <div class="meal-note green">Versión alternativa: sustituir las legumbres por pimientos asados. Baja más los CHO si es necesario.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌤️ Merienda</div>
+            <div class="meal-items"><div class="meal-item">Whey 30 g</div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌙 Cena</div>
+            <div class="meal-title">Verdura del lunes + pescado blanco</div>
+            <div class="meal-items">
+              <div class="meal-item">Sobrante coliflor/brócoli del lunes (libre)</div>
+              <div class="meal-item">Pescado blanco 1 filete (~150 g)</div>
+              <div class="meal-item">Patata 200 g o boniato</div>
+            </div>
+            <div class="meal-note blue">Sleep low: la patata/boniato va bien en este contexto porque el martes es descanso y el pescado tiene poca grasa — no sube mucho la carga calórica total.</div>
+          </div>
         </div>
       </div>
 
       <!-- MIÉRCOLES -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Miércoles</span><span class="day-type-tag dtype-high">Alta CHO</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Miércoles</span><span class="day-type-tag dtype-high">Alta CHO · Sweet Spot</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno — Carga CHO</div><div class="meal-title">Desayuno base + extra carbos</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 80 g (más cantidad)</div><div class="meal-item">Plátano 1 ud + miel 15 g</div><div class="meal-item">Whey 30 g</div></div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida — Pre-entreno (tarde)</div><div class="meal-title">Pasta + proteína magra</div><div class="meal-items"><div class="meal-item">Pasta integral 120 g (peso seco)</div><div class="meal-item">Atún al natural 2 latas (160 g)</div><div class="meal-item">Tomate triturado + aceite de oliva</div><div class="meal-item">Parmesano rallado 20 g</div></div><div class="meal-note">Comer 2.5–3h antes del entreno de tarde. Los carbos tienen tiempo de almacenarse como glucógeno.</div></div>
-          <div class="meal-block"><div class="meal-time">🚴 Pre-entreno (30–45 min antes)</div><div class="meal-title">Boost rápido</div><div class="meal-items"><div class="meal-item">Plátano maduro 1 ud</div><div class="meal-item">1 tostada con mermelada (opcional)</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena — Post Sweet Spot</div><div class="meal-title">Recuperación: arroz + proteína</div><div class="meal-items"><div class="meal-item">Arroz blanco 100 g (peso seco)</div><div class="meal-item">Pechuga de pollo 200 g</div><div class="meal-item">Verduras al vapor</div><div class="meal-item">Whey 30 g (si falta proteína)</div></div><div class="meal-note green">Post-entreno: tomar dentro de los 30–45 min después de terminar. Ventana anabólica activa.</div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno</div>
+            <div class="meal-title">Igual que lunes + extra carbos</div>
+            <div class="meal-items">
+              <div class="meal-item">Bocadillo jamón serrano/pavo + whey 30 g</div>
+              <div class="meal-item">O yogur griego 200 g + avena 80 g + plátano + whey 30 g</div>
+            </div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida — Pre Sweet Spot</div>
+            <div class="meal-title">Boloñesa de ternera</div>
+            <div class="meal-items">
+              <div class="meal-item">Carne picada de ternera 150 g</div>
+              <div class="meal-item">Gnocchis 250 g (cocinados) — O pastel de patata 300 g</div>
+              <div class="meal-item">Salsa boloñesa con tomate y verduras</div>
+            </div>
+            <div class="meal-note">Comer 2.5–3h antes del entreno. El plato tiene suficiente CHO para el Sweet Spot — no necesitas añadir nada más.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🚴 Pre-entreno (30–45 min antes)</div>
+            <div class="meal-items"><div class="meal-item">Plátano 1 ud</div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌙 Cena — Post Sweet Spot</div>
+            <div class="meal-title">Ensalada tomate + burrata + calamares</div>
+            <div class="meal-items">
+              <div class="meal-item">Burrata 125 g</div>
+              <div class="meal-item">Calamares a la plancha ~160 g</div>
+              <div class="meal-item">Patata 200 g o boniato</div>
+              <div class="meal-item">Tomate (libre)</div>
+              <div class="meal-item">Whey 30 g post-entreno (antes de cenar)</div>
+            </div>
+            <div class="meal-note green">El whey inmediatamente al llegar a casa. La cena después. No juntes los dos en un solo momento.</div>
+          </div>
         </div>
       </div>
 
       <!-- JUEVES -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Jueves ⚡</span><span class="day-type-tag dtype-med">Día crítico</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z2)">3–4 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Jueves ⚡</span><span class="day-type-tag dtype-med">Día crítico · Z2</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z2)">3–4 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida — Crítica (pre-entreno tarde)</div><div class="meal-title">Pasta de atún — La comida más importante del día</div><div class="meal-items"><div class="meal-item">Pasta 100 g (peso seco)</div><div class="meal-item">Atún al natural 2 latas (160 g)</div><div class="meal-item">Tomate + aceite + orégano</div></div><div class="meal-note">Este plato es el núcleo del jueves: recarga el glucógeno gastado el miércoles y carga para el entreno Z2 de tarde.</div></div>
-          <div class="meal-block"><div class="meal-time">🚴 Pre-entreno Z2 (30 min antes)</div><div class="meal-title">Carbos de fácil digestión</div><div class="meal-items"><div class="meal-item">Plátano 1 ud</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena — Post Z2</div><div class="meal-title">Tortilla + patata — Proteína alta</div><div class="meal-items"><div class="meal-item">3–4 huevos (tortilla española o francesa)</div><div class="meal-item">Patata mediana 150 g (cocida o asada)</div><div class="meal-item">Espinacas salteadas</div><div class="meal-item">Aceite de oliva 10 ml</div></div><div class="meal-note green">La patata aquí es la pre-carga para el viernes de intervalos. No la quites.</div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno</div>
+            <div class="meal-title">Igual que lunes</div>
+            <div class="meal-items">
+              <div class="meal-item">Bocadillo jamón serrano/pavo + whey 30 g</div>
+              <div class="meal-item">O yogur griego 200 g + avena 60 g + plátano + whey 30 g</div>
+            </div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida — Ajuste crítico obligatorio</div>
+            <div class="meal-title">Ensalada de pasta con samfaina + atún</div>
+            <div class="meal-items">
+              <div class="meal-item">Pasta 80–100 g (peso seco)</div>
+              <div class="meal-item">Samfaina (salsa verduras del martes)</div>
+              <div class="meal-item">⚠️ Añadir: atún 1–2 latas (80–160 g) — NO es opcional</div>
+            </div>
+            <div class="meal-note">El menú original no tiene proteína en esta comida. Sin el atún, el jueves solo llegarías a ~50 g de proteína en todo el día. Insuficiente para un día de entreno.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🚴 Pre-entreno Z2 (30 min antes)</div>
+            <div class="meal-items"><div class="meal-item">Plátano 1 ud</div></div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌙 Cena</div>
+            <div class="meal-title">Judía verde + patata + tortilla francesa</div>
+            <div class="meal-items">
+              <div class="meal-item">Tortilla francesa — 2 huevos</div>
+              <div class="meal-item">Patata 200 g</div>
+              <div class="meal-item">Judía verde (libre)</div>
+              <div class="meal-item">Whey 30 g post-entreno (antes de cenar)</div>
+            </div>
+            <div class="meal-note green">La patata de esta cena es la pre-carga para el viernes de Z5. No la elimines aunque sea tarde.</div>
+          </div>
         </div>
       </div>
 
       <!-- VIERNES -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Viernes</span><span class="day-type-tag dtype-high">Alta CHO</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Viernes</span><span class="day-type-tag dtype-high">Alta CHO · Z5 + pre-sábado</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--ss)">4–5 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno — Carga pre-Z5</div><div class="meal-title">Desayuno base + carbos extra</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 80 g</div><div class="meal-item">Plátano 1 ud + miel 15 g</div><div class="meal-item">Whey 30 g</div></div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida (antes de salir a las 15h)</div><div class="meal-title">Arroz + pollo — Carga pre-Z5</div><div class="meal-items"><div class="meal-item">Arroz blanco 120 g (peso seco)</div><div class="meal-item">Pollo 180 g</div><div class="meal-item">Verduras al vapor</div></div><div class="meal-note">Comer a las 12:30–13:00. Los intervalos Z5 exigen glucógeno disponible — no te saltes esta comida.</div></div>
-          <div class="meal-block"><div class="meal-time">🚴 Pre-Z5 (30–45 min antes, ~14:15h)</div><div class="meal-title">Activación rápida</div><div class="meal-items"><div class="meal-item">Plátano maduro 1 ud</div><div class="meal-item">Café (opcional, mejora rendimiento en Z5)</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena — PRE-CARGA SÁBADO</div><div class="meal-title">Cena de carga — La más importante de la semana</div><div class="meal-items"><div class="meal-item">Arroz blanco 150 g (peso seco) O patata 350 g</div><div class="meal-item">Pollo o salmón 200 g</div><div class="meal-item">Aceite de oliva 15 ml</div><div class="meal-item">Verdura mínima (no llenar con fibra)</div></div><div class="meal-note">Esta cena carga el glucógeno muscular para la ruta del sábado. No la reduzcas. El extra de CHO es necesario.</div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno — Extra CHO</div>
+            <div class="meal-title">Igual que lunes + miel o fruta extra</div>
+            <div class="meal-items">
+              <div class="meal-item">Bocadillo jamón serrano/pavo + whey 30 g + plátano aparte</div>
+              <div class="meal-item">O yogur griego 200 g + avena 80 g + plátano + miel 15 g + whey 30 g</div>
+            </div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida — Pre-Z5 (antes de salir a las 15h)</div>
+            <div class="meal-title">Verdura del jueves + salmón</div>
+            <div class="meal-items">
+              <div class="meal-item">Salmón 1 filete (~160 g)</div>
+              <div class="meal-item">Sobrante judía verde del jueves (libre)</div>
+              <div class="meal-item">⚠️ Añadir: arroz blanco 100 g (peso seco) o patata 250 g</div>
+            </div>
+            <div class="meal-note">El menú original no tiene CHO en esta comida. Los Z5 requieren glucógeno disponible — sin carbos la sesión de intervalos se degrada. Añadir arroz o patata es obligatorio.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🚴 Pre-Z5 (30–45 min antes, ~14:15h)</div>
+            <div class="meal-items">
+              <div class="meal-item">Plátano 1 ud</div>
+              <div class="meal-item">Café (opcional — mejora rendimiento en Z5)</div>
+            </div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌙 Cena — PRE-CARGA SÁBADO</div>
+            <div class="meal-title">Fajitas con boloñesa del miércoles + carbos extra</div>
+            <div class="meal-items">
+              <div class="meal-item">2 tortillas de trigo (fajitas)</div>
+              <div class="meal-item">Boloñesa de ternera sobrante del miércoles</div>
+              <div class="meal-item">⚠️ Añadir: arroz 150 g (peso seco) o patata 350 g aparte</div>
+            </div>
+            <div class="meal-note">La cena de pre-carga más importante de la semana. Los carbos extra son para la ruta de sábado, no te los saltes aunque estés lleno.</div>
+          </div>
         </div>
       </div>
 
       <!-- SÁBADO -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Sábado 🚴</span><span class="day-type-tag dtype-vhigh">Muy alta CHO</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z4)">5–6 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Sábado 🚴</span><span class="day-type-tag dtype-vhigh">Muy alta CHO · Ruta</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z4)">5–6 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno pre-ruta (7:30–8:00h)</div><div class="meal-title">Desayuno ligero y digestivo — Salida 8:30h</div><div class="meal-items"><div class="meal-item">Tostadas de pan blanco 3 rebanadas + mermelada</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g + agua (no con leche, más rápido)</div><div class="meal-item">Café</div></div><div class="meal-note">Pan blanco (no integral) — digestión más rápida. Sale a rodar en 30–60 min, sin sensación de pesadez.</div></div>
-          <div class="meal-block"><div class="meal-time">🚴 En ruta — Cada 45 minutos</div><div class="meal-title">Nutrición en carretera</div><div class="meal-items"><div class="meal-item">1 gel energético cada 45 min (a partir del km 30–40)</div><div class="meal-item">O barrita de dátiles/cereales cada 45 min</div><div class="meal-item">500 ml agua cada hora mínimo</div><div class="meal-item">Electrolitos si hace calor o ruta +2.5h</div></div><div class="meal-note">Para rutas de 2.5–3h: mínimo 2–3 geles. Si no comes en ruta, la ruta acaba en Z1 aunque quieras Z2.</div></div>
-          <div class="meal-block"><div class="meal-time">🏁 Post-ruta — Primeros 30 min</div><div class="meal-title">Recuperación inmediata</div><div class="meal-items"><div class="meal-item">Whey 30 g + agua — inmediatamente al llegar</div><div class="meal-item">Plátano o fruta</div></div><div class="meal-note green">Los primeros 30 min post-ejercicio son la ventana más importante para recuperación muscular.</div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida post-ruta</div><div class="meal-title">Carga de recuperación completa</div><div class="meal-items"><div class="meal-item">Pasta o arroz 150 g (peso seco)</div><div class="meal-item">Proteína magra 200 g (pollo, atún, salmón)</div><div class="meal-item">Verdura variada</div><div class="meal-item">Aceite de oliva generoso</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena</div><div class="meal-title">Normal — No sobrecargar</div><div class="meal-items"><div class="meal-item">Tortilla 2–3 huevos o pescado</div><div class="meal-item">Ensalada o verdura</div><div class="meal-item">Pan integral 1–2 rebanadas</div></div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno pre-ruta (7:30–8:00h)</div>
+            <div class="meal-title">Ligero y digestivo — Salida 8:30h</div>
+            <div class="meal-items">
+              <div class="meal-item">Tostadas pan blanco 3 rebanadas + mermelada</div>
+              <div class="meal-item">Plátano 1 ud</div>
+              <div class="meal-item">Whey 30 g con agua (no con leche)</div>
+              <div class="meal-item">Café</div>
+            </div>
+            <div class="meal-note">Pan blanco, no integral — digestión más rápida. Sal a rodar en 30–60 min sin pesadez.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🚴 En ruta — A partir del min 45</div>
+            <div class="meal-items">
+              <div class="meal-item">1 gel energético o barrita cada 45 min</div>
+              <div class="meal-item">500 ml agua cada hora mínimo</div>
+              <div class="meal-item">Electrolitos si hace calor o ruta +2.5h</div>
+            </div>
+            <div class="meal-note">Para 2.5–3h de ruta: mínimo 2–3 geles. Si no comes en ruta, acabas en Z1 aunque quieras Z2.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🏁 Post-ruta — Primeros 30 min</div>
+            <div class="meal-items">
+              <div class="meal-item">Whey 30 g + agua — inmediatamente al llegar</div>
+              <div class="meal-item">Plátano 1 ud</div>
+            </div>
+            <div class="meal-note green">Ventana de recuperación más importante de la semana. No lo dejes para después de la ducha.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida + 🌙 Cena</div>
+            <div class="meal-title">Fin de semana — Flexible</div>
+            <div class="meal-items">
+              <div class="meal-item">Mantener proteína alta (pollo, pescado, huevos)</div>
+              <div class="meal-item">CHO según apetito — el cuerpo lo pide solo</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- DOMINGO -->
       <div class="menu-day-card">
         <div class="menu-day-head" onclick="toggleMenu(this)">
-          <div class="menu-day-left"><span class="day-name">Domingo</span><span class="day-type-tag dtype-low">Baja CHO</span></div>
-          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z1)">2–3 g/kg CHO</span><span class="menu-chevron">▼</span></div>
+          <div class="menu-day-left"><span class="day-name">Domingo</span><span class="day-type-tag dtype-low">Baja CHO · Recuperación</span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:'Syne Mono',monospace;font-size:10px;color:var(--z1)">2–3 g/kg</span><span class="menu-chevron">▼</span></div>
         </div>
         <div class="menu-meals">
-          <div class="meal-block"><div class="meal-time">🌅 Desayuno</div><div class="meal-title">Desayuno base fijo</div><div class="meal-items"><div class="meal-item">Yogur griego 200 g</div><div class="meal-item">Avena 60 g</div><div class="meal-item">Plátano 1 ud</div><div class="meal-item">Whey 30 g</div></div></div>
-          <div class="meal-block"><div class="meal-time">☀️ Comida</div><div class="meal-title">Proteína + legumbre + poca fécula</div><div class="meal-items"><div class="meal-item">Salmón 180 g o pollo 200 g</div><div class="meal-item">Lentejas o garbanzos 100 g (cocinados)</div><div class="meal-item">Ensalada verde abundante</div><div class="meal-item">Aceite de oliva 15 ml</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌤️ Merienda (si hay rodada suave Z1)</div><div class="meal-title">Proteína ligera</div><div class="meal-items"><div class="meal-item">Whey 30 g</div><div class="meal-item">Fruta pequeña</div></div></div>
-          <div class="meal-block"><div class="meal-time">🌙 Cena — Sleep low</div><div class="meal-title">Alta proteína, mínimo CHO</div><div class="meal-items"><div class="meal-item">3 huevos (tortilla o revueltos)</div><div class="meal-item">Queso fresco 80 g</div><div class="meal-item">Espárragos o brócoli</div><div class="meal-item">Sin pan, sin fécula</div></div><div class="meal-note blue">Máximo déficit del fin de semana. El domingo es el día con más margen para profundizar en la pérdida de grasa.</div></div>
+          <div class="meal-block">
+            <div class="meal-time">🌅 Desayuno</div>
+            <div class="meal-title">Igual que días de semana</div>
+            <div class="meal-items">
+              <div class="meal-item">Bocadillo jamón serrano/pavo + whey 30 g</div>
+              <div class="meal-item">O yogur griego 200 g + avena 60 g + plátano + whey 30 g</div>
+            </div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">☀️ Comida + 🌙 Cena</div>
+            <div class="meal-title">Fin de semana — Flexible</div>
+            <div class="meal-items">
+              <div class="meal-item">Sin menú fijo — adaptar según apetito y actividad</div>
+              <div class="meal-item">Mantener proteína presente en cada comida (pollo, pescado, huevos)</div>
+              <div class="meal-item">Si no hay rodada Z1: reducir carbos en cena (sleep low)</div>
+              <div class="meal-item">Si hay rodada Z1: comer normal sin restricción extra</div>
+            </div>
+            <div class="meal-note blue">El domingo es el día con más margen de déficit calórico de la semana. Si no entrenas, aprovecha para hacer una cena ligera y baja en CHO.</div>
+          </div>
+          <div class="meal-block">
+            <div class="meal-time">🌤️ Merienda</div>
+            <div class="meal-items"><div class="meal-item">Whey 30 g</div></div>
+          </div>
         </div>
       </div>
 
